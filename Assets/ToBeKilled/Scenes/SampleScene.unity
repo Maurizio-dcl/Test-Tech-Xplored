@@ -540,7 +540,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 40fcdb16de064f3d8bbf692c9b902c08, type: 3}
   m_Name:
-  m_EditorClassIdentifier: TestTechXplored.Game::TestTechXplored.Game.Presentation.BoardMapView
+  m_EditorClassIdentifier: TestTechXplored.Core::TestTechXplored.Core.Scripts.Board.BoardMapView
   gridTransform: {fileID: 100000301}
   gridLayout: {fileID: 100000302}
   cellSize: 100
@@ -650,7 +650,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cbb4eada1c63407ca233be7173076d8, type: 3}
   m_Name:
   m_EditorClassIdentifier: TestTechXplored.ToBeKilled::TestTechXplored.ToBeKilled.Bootstrap.GameManager
+  gameDefinition: {fileID: 11400000, guid: ca443cfcca70f4f7fb78d7412a1a1d7b, type: 2}
   cellPrefab: {fileID: 5923666610428424836, guid: 0b49ac2c98686439283f529690a7a0cc, type: 3}
   mapView: {fileID: 100000204}
+  boardEntitiesView: {fileID: 1004, guid: 7303be3d8ebf4e6daaf1f248a5bb198d, type: 3}
   evenCellColor: {r: 0.98039216, g: 0.92156863, b: 0.84313726, a: 1}
   oddCellColor: {r: 0.46666667, g: 0.53333336, b: 0.6, a: 1}

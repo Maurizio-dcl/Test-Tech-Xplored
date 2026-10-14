@@ -1,8 +1,7 @@
-using TestTechXplored.Core.Scripts.Board;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace TestTechXplored.Game.Scripts.Presentation
+namespace TestTechXplored.Core.Scripts.Board
 {
     [RequireComponent(typeof(RectTransform))]
     public sealed class BoardMapView : MonoBehaviour

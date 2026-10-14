@@ -1,5 +1,5 @@
 using TestTechXplored.Core.Scripts.Board;
-using TestTechXplored.Game.Scripts.Presentation;
+using TestTechXplored.Game.Scripts.Definitions;
 using UnityEngine;
 
 namespace TestTechXplored.ToBeKilled.Scripts.Bootstrap
@@ -7,26 +7,34 @@ namespace TestTechXplored.ToBeKilled.Scripts.Bootstrap
     public class GameManager : MonoBehaviour
     {
         private Board _board;
-        
+
+        [SerializeField] private GameDefinition gameDefinition;
         [SerializeField] private CellPrefab cellPrefab;
         [SerializeField] private BoardMapView mapView;
-        
+        [SerializeField] private BoardEntitiesView boardEntitiesView;
+
         [SerializeField] private Color evenCellColor = Color.antiqueWhite;
         [SerializeField] private Color oddCellColor = Color.lightSlateGray;
-        
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
+
         void Start()
         {
-            Init();
-            UpdateRender();
-        }
-
-        void Init()
-        {
             _board = Board.Instance;
+            SpawnBoardEntities();
+            RenderBoard();
         }
 
-        void UpdateRender()
+        void SpawnBoardEntities()
+        {
+            BoardEntitiesView view = Instantiate(boardEntitiesView, mapView.transform);
+
+            for (var i = 0; i < gameDefinition.BoardEntities.Count; i++)
+            {
+                var entity = gameDefinition.BoardEntities[i];
+                Instantiate(entity.Model, view.EntitiesContainer);
+            }
+        }
+
+        void RenderBoard()
         {
             mapView.Configure(_board);
 
