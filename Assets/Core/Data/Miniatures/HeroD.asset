@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 758e237eb9324077a255d7fd72bdaacf, type: 3}
+  m_Name: HeroD
+  m_EditorClassIdentifier: TestTechXplored.Core::TestTechXplored.Core.Board.BoardEntityDefinition
+  uniqueId: 4
+  tags:
+  - tag: 0
+    value: Character
+  - tag: 1
+    value: Hero
+  - tag: 2
+    value: D
+  model: {fileID: 4558753300199286193, guid: 778418c05abdc4d4fbaaebc4815af350, type: 3}
