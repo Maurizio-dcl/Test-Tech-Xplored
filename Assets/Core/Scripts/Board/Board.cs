@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace TestTechXplored.Core.Scripts.Board
@@ -8,7 +9,10 @@ namespace TestTechXplored.Core.Scripts.Board
         public static Board Instance => _instance ??= new Board();
 
         private readonly BoardCell[,] _cells;
-        
+
+        public event Action<BoardEntityDefinition, BoardCell> Added;
+        public event Action<BoardEntityDefinition, BoardCell> Removed;
+
         public int Width => _cells.GetLength(1);
         public int Height => _cells.GetLength(0);
 
@@ -28,10 +32,33 @@ namespace TestTechXplored.Core.Scripts.Board
             }
         }
 
-        public void Add(BoardEntityDefinition entity, BoardCell cell) =>
+        public void Add(BoardEntityDefinition entity, BoardCell cell)
+        {
             _cells[cell.Position.y, cell.Position.x].Add(entity);
-        
-        public bool Remove(BoardEntityDefinition entity, BoardCell cell) =>
-            _cells[cell.Position.y, cell.Position.x].Remove(entity);
+            Added?.Invoke(entity, cell);
+        }
+
+        public bool Remove(BoardEntityDefinition entity, BoardCell cell)
+        {
+            if (!_cells[cell.Position.y, cell.Position.x].Remove(entity))
+                return false;
+
+            Removed?.Invoke(entity, cell);
+            return true;
+        }
+
+        public BoardCell FindCell(BoardEntityDefinition entity)
+        {
+            for (int y = 0; y < Height; y++)
+            {
+                for (int x = 0; x < Width; x++)
+                {
+                    if (_cells[y, x].Contains(entity))
+                        return _cells[y, x];
+                }
+            }
+
+            return null;
+        }
     }
 }

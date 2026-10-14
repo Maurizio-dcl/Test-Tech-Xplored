@@ -18,5 +18,7 @@ namespace TestTechXplored.Core.Scripts.Board
         internal void Add(BoardEntityDefinition entity) => _entities.Add(entity);
 
         internal bool Remove(BoardEntityDefinition entity) => _entities.Remove(entity);
+
+        internal bool Contains(BoardEntityDefinition entity) => _entities.Contains(entity);
     }
 }

@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace TestTechXplored.Core.Scripts.Board
 {
-    public class CellPrefab : MonoBehaviour
+    public class CellView : MonoBehaviour
     {
         [SerializeField] private Image foregroundImage;
         [SerializeField] private TMP_Text label;

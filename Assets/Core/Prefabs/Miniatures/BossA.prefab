@@ -149,6 +149,7 @@ GameObject:
   - component: {fileID: 1849791714873757802}
   - component: {fileID: 6167644811688536483}
   - component: {fileID: 7000000000000000001}
+  - component: {fileID: 7000000000000000003}
   m_Layer: 5
   m_Name: BossA
   m_TagString: Untagged
@@ -258,3 +259,15 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &7000000000000000003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4558753300199286193}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1fbf5d39e5be4cd1956ab681cbc3a94e, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: TestTechXplored.Core::TestTechXplored.Core.Scripts.Board.BoardEntityView
