@@ -1,3 +1,4 @@
+using TestTechXplored.Core.Scripts.Actors;
 using TestTechXplored.Core.Scripts.Board;
 using TestTechXplored.Game.Scripts.Definitions;
 using UnityEngine;
@@ -11,10 +12,11 @@ namespace TestTechXplored.ToBeKilled.Scripts.Bootstrap
         private Board _board;
         private BoardEntityView _selectedEntity;
         private BoardEntityView[] _entityViews;
+        private CellView[,] _cellViews;
         private Transform _boardEntitiesContainer;
 
         [SerializeField] private GameDefinition gameDefinition;
-        [SerializeField] private CellView cellView;
+        [SerializeField] private CellView cellViewPrefab;
         [SerializeField] private BoardMapView mapView;
         [SerializeField] private BoardEntitiesView boardEntitiesView;
 
@@ -74,6 +76,7 @@ namespace TestTechXplored.ToBeKilled.Scripts.Bootstrap
                 _board.Remove(entityView.Entity, cell);
 
             MoveEntityView(entityView, mapView.transform);
+            entityView.RestoreSize();
             entityView.SetRaycastTargets(false);
         }
 
@@ -107,17 +110,17 @@ namespace TestTechXplored.ToBeKilled.Scripts.Bootstrap
             entityView.transform.localPosition = Vector3.zero;
         }
 
-        void OnBoardEntityAdded(BoardEntityDefinition entity, BoardCell cell)
+        void OnBoardEntityAdded(ActorDefinition entity, BoardCell cell)
         {
             BoardEntityView entityView = FindEntityView(entity);
-            int cellIndex = cell.Position.y * _board.Width + cell.Position.x;
-            MoveEntityView(entityView, mapView.CellsContainer.GetChild(cellIndex));
+            CellView cellView = _cellViews[cell.Position.y, cell.Position.x];
+            MoveEntityView(entityView, cellView.EntitiesContainer);
 
             // TODO remove after tests
             Debug.Log($"Added '{entity.name}' to {cell.Position}.");
         }
 
-        void OnBoardEntityRemoved(BoardEntityDefinition entity, BoardCell cell)
+        void OnBoardEntityRemoved(ActorDefinition entity, BoardCell cell)
         {
             BoardEntityView entityView = FindEntityView(entity);
             MoveEntityView(entityView, _boardEntitiesContainer);
@@ -126,7 +129,7 @@ namespace TestTechXplored.ToBeKilled.Scripts.Bootstrap
             Debug.Log($"Removed '{entity.name}' from {cell.Position}.");
         }
 
-        BoardEntityView FindEntityView(BoardEntityDefinition entity)
+        BoardEntityView FindEntityView(ActorDefinition entity)
         {
             for (int i = 0; i < _entityViews.Length; i++)
             {
@@ -140,6 +143,7 @@ namespace TestTechXplored.ToBeKilled.Scripts.Bootstrap
         void RenderBoard()
         {
             mapView.Configure(_board);
+            _cellViews = new CellView[_board.Height, _board.Width];
 
             for (int y = 0; y < _board.Height; y++)
             {
@@ -147,7 +151,8 @@ namespace TestTechXplored.ToBeKilled.Scripts.Bootstrap
                 {
                     BoardCell cell = _board[x, y];
 
-                    CellView view = Instantiate(cellView, mapView.CellsContainer);
+                    CellView view = Instantiate(cellViewPrefab, mapView.CellsContainer);
+                    _cellViews[y, x] = view;
                     view.LabelText = $"({cell.Position.x}, {cell.Position.y})";
                     view.ForegroundImageColor = (x + y) % 2 == 0 ? evenCellColor : oddCellColor;
                     view.GetComponent<Button>().onClick.AddListener(

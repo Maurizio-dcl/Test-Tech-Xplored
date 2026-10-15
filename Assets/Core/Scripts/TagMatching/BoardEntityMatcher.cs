@@ -1,3 +1,4 @@
+using TestTechXplored.Core.Scripts.Actors;
 using TestTechXplored.Core.Scripts.Board;
 
 namespace TestTechXplored.Core.Scripts.TagMatching
@@ -5,7 +6,7 @@ namespace TestTechXplored.Core.Scripts.TagMatching
     public static class BoardEntityMatcher
     {
         public static bool Matches(
-            BoardEntityDefinition entityDefinition,
+            ActorDefinition entityDefinition,
             TagMatchingRule rule)
         {
             if (entityDefinition == null ||

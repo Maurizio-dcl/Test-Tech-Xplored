@@ -8,6 +8,9 @@ namespace TestTechXplored.Core.Scripts.Board
     {
         [SerializeField] private Image foregroundImage;
         [SerializeField] private TMP_Text label;
+        [SerializeField] private Transform entitiesContainer;
+
+        public Transform EntitiesContainer => entitiesContainer;
 
         public Color ForegroundImageColor
         {

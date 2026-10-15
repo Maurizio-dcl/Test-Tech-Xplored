@@ -1,4 +1,5 @@
 using System;
+using TestTechXplored.Core.Scripts.Actors;
 using UnityEngine;
 
 namespace TestTechXplored.Core.Scripts.Board
@@ -10,8 +11,8 @@ namespace TestTechXplored.Core.Scripts.Board
 
         private readonly BoardCell[,] _cells;
 
-        public event Action<BoardEntityDefinition, BoardCell> Added;
-        public event Action<BoardEntityDefinition, BoardCell> Removed;
+        public event Action<ActorDefinition, BoardCell> Added;
+        public event Action<ActorDefinition, BoardCell> Removed;
 
         public int Width => _cells.GetLength(1);
         public int Height => _cells.GetLength(0);
@@ -32,13 +33,13 @@ namespace TestTechXplored.Core.Scripts.Board
             }
         }
 
-        public void Add(BoardEntityDefinition entity, BoardCell cell)
+        public void Add(ActorDefinition entity, BoardCell cell)
         {
             _cells[cell.Position.y, cell.Position.x].Add(entity);
             Added?.Invoke(entity, cell);
         }
 
-        public bool Remove(BoardEntityDefinition entity, BoardCell cell)
+        public bool Remove(ActorDefinition entity, BoardCell cell)
         {
             if (!_cells[cell.Position.y, cell.Position.x].Remove(entity))
                 return false;
@@ -47,7 +48,7 @@ namespace TestTechXplored.Core.Scripts.Board
             return true;
         }
 
-        public BoardCell FindCell(BoardEntityDefinition entity)
+        public BoardCell FindCell(ActorDefinition entity)
         {
             for (int y = 0; y < Height; y++)
             {
