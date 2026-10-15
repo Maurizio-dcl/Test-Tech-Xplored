@@ -20,6 +20,7 @@ namespace Map.Views
 
         private readonly Dictionary<Tile, TileView> _tileViews = new();
         private readonly Dictionary<Actor, GameObject> _actorViews = new();
+        private readonly HashSet<Tile> _highlightedTiles = new();
 
         private Map _map;
 
@@ -54,12 +55,22 @@ namespace Map.Views
             }
         }
 
-        public void SetTilesColor(
-            Dictionary<Tile, int>.KeyCollection tiles,
-            Color color)
+        // TODO change to highlight?
+        public void SetTilesColor(IEnumerable<Tile> tiles, Color color)
         {
             foreach (Tile tile in tiles)
+            {
                 SetTileColor(tile, color);
+                _highlightedTiles.Add(tile);
+            }
+        }
+
+        public void ClearHighlightedTiles()
+        {
+            foreach (Tile tile in _highlightedTiles)
+                SetTileColor(tile, defaultTileForegroundColor);
+
+            _highlightedTiles.Clear();
         }
 
         private void OnDestroy() => Unsubscribe();
@@ -120,6 +131,8 @@ namespace Map.Views
 
         private void ClearRenderedObjects()
         {
+            _highlightedTiles.Clear();
+
             foreach (GameObject actorView in _actorViews.Values)
                 Destroy(actorView);
 

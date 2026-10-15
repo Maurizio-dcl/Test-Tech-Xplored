@@ -26,6 +26,8 @@ namespace Actors
                 MaxValue);
         }
 
+        public void RestoreToMax() => SetValue(MaxValue);
+
         public void Modify(int amount) => SetValue(Math.Clamp(Value + amount, MinValue, MaxValue));
 
         private void SetValue(int value) => Value = Mathf.Clamp(value, MinValue, MaxValue);

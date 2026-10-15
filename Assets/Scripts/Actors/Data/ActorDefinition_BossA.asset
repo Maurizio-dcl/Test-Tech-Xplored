@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Actors.ActorDefinition
   givenName: Boss A
   characterType: 1
+  hasBlockingType: 0
+  blockingType: 0
   statConfigurations:
   - definition: {fileID: 11400000, guid: 3ec6d950304f84093a6367dde805ce5d, type: 2}
     minValue: 0

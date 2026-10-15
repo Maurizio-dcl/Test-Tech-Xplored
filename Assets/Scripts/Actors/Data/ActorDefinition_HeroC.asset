@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Actors.ActorDefinition
   givenName: Hero C
   characterType: 0
+  hasBlockingType: 1
+  blockingType: 1
   statConfigurations:
   - definition: {fileID: 11400000, guid: 3ec6d950304f84093a6367dde805ce5d, type: 2}
     minValue: 0

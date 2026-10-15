@@ -13,12 +13,16 @@ namespace Actors
 
         [SerializeField] private CharacterType characterType;
 
+        [SerializeField] private bool hasBlockingType;
+        [SerializeField] private CharacterType blockingType;
+
         [SerializeField] private List<StatConfiguration> statConfigurations = new();
 
         [SerializeField] private GameObject visuals;
 
         public string GivenName => givenName;
         public CharacterType CharacterType => characterType;
+        public CharacterType? BlockingType => hasBlockingType ? blockingType : null;
         public IReadOnlyList<StatConfiguration> StatConfigurations => statConfigurations;
         public GameObject Visuals => visuals;
     }

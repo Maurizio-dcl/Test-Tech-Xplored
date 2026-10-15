@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using static Actors.StatDefinition;
 
 namespace Actors
 {
@@ -8,28 +9,33 @@ namespace Actors
         private readonly int _uniqueId;
         private readonly ActorDefinition _definition;
 
-        private readonly Dictionary<StatDefinition, Stat> _stats = new();
+        private readonly Dictionary<StatTag, Stat> _stats = new();
 
         public int UniqueId => _uniqueId;
         public ActorDefinition Definition => _definition;
 
-        public IEnumerable<Stat> Stats => _stats.Values;
-
         public Actor(int uniqueId, ActorDefinition definition)
         {
+            if (definition == null)
+                throw new ArgumentNullException(nameof(definition));
+
             _uniqueId = uniqueId;
             _definition = definition;
 
             foreach (var config in definition.StatConfigurations)
             {
-                var stat = new Stat(config);
+                if (config.Definition == null)
+                    throw new ArgumentException($"Actor '{definition.name}' has a stat without a definition.");
 
-                if (!_stats.TryAdd(config.Definition, stat))
-                    throw new ArgumentException($"Duplicate stat: {config.Definition}");
+                var stat = new Stat(config);
+                StatTag tag = config.Definition.Tag;
+
+                if (!_stats.TryAdd(tag, stat))
+                    throw new ArgumentException($"Actor '{definition.name}' has more than one stat tagged '{tag}'.");
             }
         }
 
-        public bool TryGetStat(StatDefinition definition, out Stat stat) => 
-            _stats.TryGetValue(definition, out stat);
+        public bool TryGetStat(StatTag tag, out Stat stat) =>
+            _stats.TryGetValue(tag, out stat);
     }
 }
