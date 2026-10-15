@@ -1,10 +1,9 @@
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Map.Views
 {
-    public class TileView : MonoBehaviour
+    public sealed class TileView : MonoBehaviour
     {
         [SerializeField] private Image foregroundImage;
 

@@ -8,10 +8,7 @@ namespace Map
 {
     public sealed class Map
     {
-        private static Map _instance;
-        public static Map Instance => _instance ??= new Map();
-
-        private static readonly Vector2Int[] Directions =
+        private readonly Vector2Int[] _directions =
         {
             Vector2Int.up,
             Vector2Int.down,
@@ -22,12 +19,14 @@ namespace Map
         private readonly Tile[,] _tiles;
         private readonly Dictionary<Actor, Tile> _actorPositions = new();
 
+        public event Action<Actor, Tile, Tile> ActorMoved;
+
         public int Width => _tiles.GetLength(1);
         public int Height => _tiles.GetLength(0);
 
         public Tile this[int x, int y] => _tiles[y, x];
 
-        private Map()
+        public Map()
         {
             _tiles = new Tile[5, 8];
 
@@ -38,6 +37,15 @@ namespace Map
                     _tiles[y, x] = new Tile(new Vector2Int(x, y));
                 }
             }
+        }
+
+        public bool Move(Actor actor, Vector2Int position)
+        {
+            if (!IsInside(position))
+                return false;
+
+            Tile destinationTile = _tiles[position.y, position.x];
+            return Move(actor, destinationTile);
         }
 
         public bool Move(Actor actor, Tile destination)
@@ -59,6 +67,8 @@ namespace Map
 
             destination.Actor = actor;
             _actorPositions[actor] = destination;
+
+            ActorMoved?.Invoke(actor, previous, destination);
 
             return true;
         }
@@ -153,7 +163,7 @@ namespace Map
             {
                 pending.Add(start);
                 distances.Add(start, 0);
-                
+
                 // For each available tile we perform a breadth-first search in the 4 axis
                 for (int i = 0; i < pending.Count; i++)
                 {
@@ -165,7 +175,7 @@ namespace Map
                         continue;
 
                     // breadth-first search
-                    foreach (Vector2Int direction in Directions)
+                    foreach (Vector2Int direction in _directions)
                     {
                         Vector2Int searchPosition = current.Position + direction;
 
@@ -179,7 +189,7 @@ namespace Map
                         // Skip if we already searched this tile
                         if (distances.ContainsKey(neighbor))
                             continue;
-                    
+
                         // We skip over searching and adding to results if the tile is occupied by an actor
                         // which type we consider blocking
                         if (neighbor.IsOccupied &&
