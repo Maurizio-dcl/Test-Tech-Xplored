@@ -14,5 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Actors.ActorDefinition
   givenName: Hero C
   characterType: 0
-  statConfigurations: []
+  statConfigurations:
+  - definition: {fileID: 11400000, guid: 3ec6d950304f84093a6367dde805ce5d, type: 2}
+    minValue: 0
+    maxValue: 2
+    initialValue: 2
+  - definition: {fileID: 11400000, guid: 2d66fea94b1d24fcfbc42ed682debd79, type: 2}
+    minValue: 0
+    maxValue: 99
+    initialValue: 0
   visuals: {fileID: 4558753300199286193, guid: 952fe21ac415f4a9ba2833332074565b, type: 3}

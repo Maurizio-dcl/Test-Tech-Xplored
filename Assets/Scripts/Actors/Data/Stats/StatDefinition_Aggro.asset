@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5eaea1ec58e44376a1cc4faeb49fd1cb, type: 3}
   m_Name: StatDefinition_Aggro
   m_EditorClassIdentifier: Assembly-CSharp::Actors.StatDefinition
-  tag: 0
-  isVisible: 1
+  tag: 1
+  isVisible: 0
