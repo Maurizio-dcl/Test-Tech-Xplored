@@ -25,7 +25,7 @@ namespace Actors
                 var stat = new Stat(config);
 
                 if (!_stats.TryAdd(config.Definition, stat))
-                    throw new ArgumentException($"Duplicate stat: {config.Definition.name}");
+                    throw new ArgumentException($"Duplicate stat: {config.Definition}");
             }
         }
 

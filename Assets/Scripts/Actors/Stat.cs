@@ -13,9 +13,6 @@ namespace Actors
 
         public Stat(StatConfiguration config)
         {
-            if (config.Definition == null)
-                throw new ArgumentException("Missing stat definition.");
-
             if (config.MinValue > config.MaxValue)
                 throw new ArgumentException("Invalid stat range.");
 

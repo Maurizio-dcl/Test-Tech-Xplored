@@ -7,8 +7,17 @@ namespace Actors
         menuName = "ScriptableObjects/TestTechXplored/Actor/StatDefinition")]
     public sealed class StatDefinition : ScriptableObject
     {
-        [SerializeField] private string statName;
+        public enum StatTag
+        {
+            Movement,
+            Aggro
+            // ...Add here new stat labels to define new "stats"
+        }
 
-        public string StatName => statName;
+        [SerializeField] private StatTag tag;
+        [SerializeField] private bool isVisible; // whether the stat is actually visible in-game
+
+        public StatTag Tag => tag;
+        public bool IsVisible => isVisible;
     }
 }
