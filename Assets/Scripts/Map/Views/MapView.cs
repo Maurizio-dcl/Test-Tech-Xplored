@@ -19,10 +19,13 @@ namespace Map.Views
         [SerializeField] private Color defaultTileForegroundColor = Color.antiqueWhite;
 
         private readonly Dictionary<Tile, TileView> _tileViews = new();
+        private readonly Dictionary<TileView, Tile> _tilesByView = new();
         private readonly Dictionary<Actor, GameObject> _actorViews = new();
         private readonly HashSet<Tile> _highlightedTiles = new();
 
         private Map _map;
+
+        public event Action<Tile> TileClicked;
 
         public void Initialize(Map map)
         {
@@ -50,13 +53,14 @@ namespace Map.Views
                     TileView tileView = Instantiate(tileViewPrefab, gridTransform);
                     tileView.name = $"Tile ({x}, {y})";
                     tileView.ForegroundImageColor = defaultTileForegroundColor;
+                    tileView.Clicked += OnTileClicked;
                     _tileViews.Add(tile, tileView);
+                    _tilesByView.Add(tileView, tile);
                 }
             }
         }
 
-        // TODO change to highlight?
-        public void SetTilesColor(IEnumerable<Tile> tiles, Color color)
+        public void SetTilesColor(HashSet<Tile> tiles, Color color)
         {
             foreach (Tile tile in tiles)
             {
@@ -65,7 +69,7 @@ namespace Map.Views
             }
         }
 
-        public void ClearHighlightedTiles()
+        public void ClearTilesColor()
         {
             foreach (Tile tile in _highlightedTiles)
                 SetTileColor(tile, defaultTileForegroundColor);
@@ -78,6 +82,12 @@ namespace Map.Views
         private void OnRectTransformDimensionsChange() => ResizeGrid();
 
         private void OnActorMoved(Actor actor, Tile previous, Tile destination) => RenderActor(actor, destination);
+
+        private void OnTileClicked(TileView tileView)
+        {
+            if (_tilesByView.TryGetValue(tileView, out Tile tile))
+                TileClicked?.Invoke(tile);
+        }
 
         private void RenderActor(Actor actor, Tile destination)
         {
@@ -137,10 +147,14 @@ namespace Map.Views
                 Destroy(actorView);
 
             foreach (TileView tileView in _tileViews.Values)
+            {
+                tileView.Clicked -= OnTileClicked;
                 Destroy(tileView.gameObject);
+            }
 
             _actorViews.Clear();
             _tileViews.Clear();
+            _tilesByView.Clear();
         }
 
         private void Unsubscribe()

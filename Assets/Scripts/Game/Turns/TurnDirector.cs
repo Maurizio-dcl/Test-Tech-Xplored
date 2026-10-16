@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Actors;
+using Game.Phases;
 
 namespace Game.Turns
 {
@@ -45,7 +46,8 @@ namespace Game.Turns
                 _phaseStarted = true;
             }
 
-            // Execute a phase for the active actor
+            // Execute a phase for the active actor and keep trying.
+            // This is due to the current approach coming from unity player loop Update() function.
             if (phase.Tick() == TurnPhaseStatus.Running)
                 return;
 

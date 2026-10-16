@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using Actors;
+using Game.Phases;
 using Game.Phases.Movement;
 using Game.Phases.Movement.Systems;
 using Game.Turns;
+using Game.Views;
 using Map.Views;
 using UnityEngine;
 using static Game.BossSpawnsDefinition;
@@ -12,6 +14,7 @@ namespace Game
     public sealed class GameLoop : MonoBehaviour
     {
         [SerializeField] private MapView mapView;
+        [SerializeField] private MovementControlsView movementControlsView;
         [SerializeField] private BossSpawnsDefinition bossSpawnsDefinition;
 
         [SerializeField] private Color reachableTileColor = Color.green;
@@ -89,10 +92,17 @@ namespace Game
             // Initialize new movement systems here
             IMovementSystem[] movementSystems = new IMovementSystem[]
             {
-                new MovementMaintenanceSystem(),
-                new MovementCheckSystem(mapView, reachableTileColor)
+                new MovementMaintenanceSystem()
             };
-            return new(mapView, movementSystems);
+
+            IMovementSystem[] repeatingMovementSystems = new IMovementSystem[]
+            {
+                new MovementCheckSystem(mapView, reachableTileColor),
+                new MovementSelectionSystem(mapView, movementControlsView),
+                new MovementExecuteSystem()
+            };
+
+            return new(mapView, movementSystems, repeatingMovementSystems);
         }
     }
 }

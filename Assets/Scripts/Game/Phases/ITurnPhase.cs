@@ -1,4 +1,6 @@
-namespace Game.Turns
+using Game.Turns;
+
+namespace Game.Phases
 {
     public interface ITurnPhase
     {

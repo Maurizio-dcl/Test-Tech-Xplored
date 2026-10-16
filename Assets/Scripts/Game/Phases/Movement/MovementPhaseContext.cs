@@ -10,16 +10,11 @@ namespace Game.Phases.Movement
         public TurnContext Turn { get; }
         public Stat MovementStat { get; set; }
         public IReadOnlyDictionary<Tile, int> ReachableTiles { get; set; }
+        public Tile SelectedDestination { get; set; }
 
         public MovementPhaseContext(TurnContext turn)
         {
             Turn = turn;
-        }
-        
-        public MovementPhaseContext(TurnContext turn, Stat movementStat)
-        {
-            Turn = turn;
-            MovementStat = movementStat;
         }
     }
 }
