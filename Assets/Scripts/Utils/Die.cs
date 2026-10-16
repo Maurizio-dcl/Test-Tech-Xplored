@@ -1,21 +1,14 @@
 namespace Utils
 {
-    public readonly struct Die
+    public enum Die
     {
-        public static readonly Die D2 = new(2);
-        public static readonly Die D3 = new(3);
-        public static readonly Die D4 = new(4);
-        public static readonly Die D6 = new(6);
-        public static readonly Die D8 = new(8);
-        public static readonly Die D10 = new(10);
-        public static readonly Die D12 = new(12);
-        public static readonly Die D20 = new(20);
-
-        public int Faces { get; }
-
-        private Die(int faces)
-        {
-            Faces = faces;
-        }
+        D2 = 2,
+        D3 = 3,
+        D4 = 4,
+        D6 = 6,
+        D8 = 8,
+        D10 = 10,
+        D12 = 12,
+        D20 = 20,
     }
 }

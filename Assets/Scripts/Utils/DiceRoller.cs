@@ -32,25 +32,28 @@ namespace Utils
     {
         public static DiceRollResult Roll(DiceExpression expression)
         {
-            if (expression.DiceNumber <= 0)
+            int diceNumber = expression.DiceNumber;
+            Die die = expression.Die;
+            int dieFaces = (int)die;
+            
+            if (diceNumber <= 0)
                 throw new ArgumentOutOfRangeException(
                     nameof(expression.DiceNumber),
                     expression.DiceNumber,
                     "Dice number in expression must be greater than zero.");
             
-            if (expression.Die.Faces <= 0)
+            if (dieFaces <= 0)
                 throw new ArgumentOutOfRangeException(
-                    nameof(expression.Die.Faces),
-                    expression.Die.Faces,
+                    nameof(expression.Die),
+                    expression.Die,
                     "Die faces must be greater than zero.");
-
-            Die die = expression.Die;
-            DieRollResult[] results = new DieRollResult[expression.DiceNumber];
+            
+            DieRollResult[] results = new DieRollResult[diceNumber];
             int total = 0;
 
             for (int i = 0; i < results.Length; i++)
             {
-                int rollResult = RollSingleDie(die);
+                int rollResult = RollSingleDie(dieFaces);
                 results[i] = new DieRollResult(die, rollResult);
                 total += rollResult;
             }
@@ -58,6 +61,6 @@ namespace Utils
             return new DiceRollResult(results, total);
         }
 
-        private static int RollSingleDie(Die die) => UnityEngine.Random.Range(1, die.Faces + 1);
+        private static int RollSingleDie(int faces) => UnityEngine.Random.Range(1, faces + 1);
     }
 }

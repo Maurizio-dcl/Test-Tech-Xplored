@@ -1,14 +1,20 @@
+using System;
+using UnityEngine;
+
 namespace Utils
 {
-    public readonly struct DiceExpression
+    [Serializable]
+    public struct DiceExpression
     {
-        public int DiceNumber { get; }
-        public Die Die { get; }
+        [SerializeField] private int diceNumber;
+        [SerializeField] private Die die;
+        public int DiceNumber => diceNumber;
+        public Die Die => die;
 
         public DiceExpression(int diceNumber, Die die)
         {
-            DiceNumber = diceNumber;
-            Die = die;
+            this.diceNumber = diceNumber;
+            this.die = die;
         }
     }
 }
