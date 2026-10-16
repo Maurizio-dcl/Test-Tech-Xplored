@@ -1,16 +1,25 @@
+using UnityEngine;
+
 namespace Actors.Actions
 {
-    public class Action
+    public sealed class Action
     {
+        public int CooldownValue { get; private set; }
+        public int MaxCooldown { get; }
         public ActionDefinition Definition { get; }
-        public IActionLogic Logic { get; }
-        
-        public Action(ActionDefinition definition, IActionLogic logic)
+
+        public Action(ActionDefinition definition)
         {
             Definition = definition;
-            Logic = logic;
+            MaxCooldown = definition.Cooldown;
         }
-        
-        public void Execute() => Logic.Execute(Definition);
+
+        public void Execute() => Definition.Execute();
+
+        public void SetOnCooldown() => SetCooldown(MaxCooldown);
+
+        public void ModifyCooldown(int amount) => SetCooldown(Mathf.Clamp(CooldownValue + amount, 0, MaxCooldown));
+
+        private void SetCooldown(int value) => CooldownValue = Mathf.Clamp(value, 0, MaxCooldown);
     }
 }

@@ -5,7 +5,7 @@ namespace Actors.Actions
     [CreateAssetMenu(
         fileName = "ActionDefinition",
         menuName = "ScriptableObjects/TestTechXplored/Actor/Actions/ActionDefinition")]
-    public class ActionDefinition : ScriptableObject
+    public abstract class ActionDefinition : ScriptableObject
     {
         [SerializeField] private string actionName;
         [SerializeField] private string actionDescription;
@@ -14,7 +14,11 @@ namespace Actors.Actions
         [SerializeField] private int minRange;
         [SerializeField] private int maxRange;
         [SerializeField] private Targeting targeting;
-        [SerializeField] private ActionNumericalValues actionNumericalValues;
         [SerializeField] private GameObject visuals;
+
+        public int Cooldown => cooldown;
+
+        // TODO pass down action context to Execute (coming from system)
+        public abstract void Execute();
     }
 }

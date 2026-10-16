@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Actors.Actions;
 using UnityEngine;
 
 namespace Actors
@@ -17,6 +18,8 @@ namespace Actors
         [SerializeField] private CharacterType blockingType;
 
         [SerializeField] private List<StatConfiguration> statConfigurations = new();
+        
+        [SerializeField] private List<ActionDefinition> actions = new();
 
         [SerializeField] private GameObject visuals;
 
@@ -24,6 +27,7 @@ namespace Actors
         public CharacterType CharacterType => characterType;
         public CharacterType? BlockingType => hasBlockingType ? blockingType : null;
         public IReadOnlyList<StatConfiguration> StatConfigurations => statConfigurations;
+        public IReadOnlyList<ActionDefinition> Actions => actions;
         public GameObject Visuals => visuals;
     }
 }
