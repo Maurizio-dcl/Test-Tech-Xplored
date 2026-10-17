@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Actors;
+using Actors.Actions;
 using Game.Turns;
 using Map;
 
@@ -11,6 +12,7 @@ namespace Game.Phases.Action
         public Actors.Actions.Action SelectedAction { get; set; }
         public IReadOnlyList<Actor> ValidTargets { get; set; }
         public IReadOnlyList<Actor> SelectedTargets { get; set; }
+        public ActionOutcome Outcome { get; set; }
 
         public ActionPhaseContext(TurnContext turn)
         {

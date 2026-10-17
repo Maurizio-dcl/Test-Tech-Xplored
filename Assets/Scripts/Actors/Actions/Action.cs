@@ -18,7 +18,7 @@ namespace Actors.Actions
             MaxCooldown = definition.Cooldown;
         }
 
-        public void Execute(ActionPhaseContext context) => Definition.Execute(context);
+        public ActionOutcome Execute(ActionPhaseContext context) => Definition.Execute(context);
 
         public void SetOnCooldown() => SetCooldown(EffectiveMaxCooldown);
 

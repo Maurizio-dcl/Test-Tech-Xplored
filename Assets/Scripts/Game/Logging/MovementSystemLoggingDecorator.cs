@@ -10,6 +10,8 @@ namespace Game.Logging
     {
         private readonly IMovementSystem _system;
         private readonly ILogSink _logSink;
+        
+        private MovementPhaseContext _context;
 
         public MovementSystemLoggingDecorator(IMovementSystem system, ILogSink logSink)
         {
@@ -21,21 +23,9 @@ namespace Game.Logging
 
         public MovementSystemStatus Tick(MovementPhaseContext context)
         {
-            void LogMovement(Actor actor, Tile origin, Tile destination)
-            {
-                if (actor != context.Turn.Actor)
-                    return;
+            _context = context;
+            _context.Turn.Map.ActorMoved += LogMovement;
 
-                string actorName = actor.Definition.GivenName;
-                string originPosition = origin == null ? "outside map" : origin.Position.ToString();
-
-                _logSink.Log(
-                    $"[Movement] Round: {context.Turn.Round}, " +
-                    $"Actor: {actorName} ({actor.UniqueId}), " +
-                    $"Origin: {originPosition}, Destination: {destination.Position}.");
-            }
-
-            context.Turn.Map.ActorMoved += LogMovement;
             try
             {
                 return _system.Tick(context);
@@ -43,9 +33,25 @@ namespace Game.Logging
             finally
             {
                 context.Turn.Map.ActorMoved -= LogMovement;
+                _context = null;
             }
         }
 
         public void Exit(MovementPhaseContext context) => _system.Exit(context);
+        
+        private void LogMovement(Actor actor, Tile origin, Tile destination)
+        {
+            // An action might move the actor (i.e. "push")
+            if (actor != _context.Turn.Actor)
+                return;
+
+            string actorName = actor.Definition.GivenName;
+            string originPosition = origin == null ? "outside map" : origin.Position.ToString();
+
+            _logSink.Log(
+                $"[Movement] Round: {_context.Turn.Round}, " +
+                $"{actorName} [id: {actor.UniqueId}], " +
+                $"Origin: {originPosition}, Destination: {destination.Position}.");
+        }
     }
 }

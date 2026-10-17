@@ -23,6 +23,6 @@ namespace Actors.Actions
         public Sprite Icon => icon;
         public Color BackgroundColor => backgroundColor;
 
-        public abstract void Execute(ActionPhaseContext context);
+        public abstract ActionOutcome Execute(ActionPhaseContext context);
     }
 }

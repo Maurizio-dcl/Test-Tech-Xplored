@@ -10,7 +10,7 @@ namespace Game.Phases.Action.Systems
         {
             Actors.Actions.Action action = context.SelectedAction;
 
-            action.Execute(context);
+            context.Outcome = action.Execute(context);
             action.SetOnCooldown();
 
             return ActionSystemStatus.Complete;

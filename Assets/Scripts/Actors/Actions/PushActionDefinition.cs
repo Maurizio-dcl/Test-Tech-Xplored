@@ -6,7 +6,8 @@ namespace Actors.Actions
     public sealed class PushActionDefinition : ActionDefinition
     {
         [SerializeField] private int pushAmount;
-        public override void Execute(ActionPhaseContext context)
+        
+        public override ActionOutcome Execute(ActionPhaseContext context)
         {
             throw new System.NotImplementedException();
         }

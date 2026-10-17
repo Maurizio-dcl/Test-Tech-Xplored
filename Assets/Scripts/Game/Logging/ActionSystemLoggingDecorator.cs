@@ -1,5 +1,3 @@
-using System;
-using Action = Actors.Actions.Action;
 using Game.Phases.Action;
 using Game.Phases.Action.Systems;
 
@@ -20,17 +18,10 @@ namespace Game.Logging
 
         public ActionSystemStatus Tick(ActionPhaseContext context)
         {
-            Action action = context.SelectedAction;
             ActionSystemStatus status = _system.Tick(context);
 
-            if (action != null && status != ActionSystemStatus.Running)
-            {
-                string actorName = context.Turn.Actor.Definition.GivenName;
-                _logSink.Log(
-                    $"[Action] Round: {context.Turn.Round}, " +
-                    $"Actor: {actorName} UniqueId: {context.Turn.Actor.UniqueId}, " +
-                    $"Action: {action.Definition.ActionName}.");
-            }
+            if (context.Outcome != null && status != ActionSystemStatus.Running)
+                _logSink.Log(context.Outcome.Format());
 
             return status;
         }
