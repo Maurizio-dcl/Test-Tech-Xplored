@@ -20,6 +20,7 @@ namespace Game
         [SerializeField] private BossSpawnsDefinition bossSpawnsDefinition;
 
         [SerializeField] private Color reachableTileColor = Color.green;
+        [SerializeField] private Color targetableTileColor = Color.red;
 
         private Map.Map _map;
         private TurnDirector _turnDirector;
@@ -115,7 +116,9 @@ namespace Game
             };
 
             IActionSystem[] repeatingActionSystems = {
-                new ActionSelectionSystem(actorControlsView)
+                new ActionSelectionSystem(actorControlsView),
+                new ActionTargetCheckSystem(),
+                new ActionTargetSelectionSystem(mapView, targetableTileColor)
             };
 
             return new(mapView, actionSystems, repeatingActionSystems);

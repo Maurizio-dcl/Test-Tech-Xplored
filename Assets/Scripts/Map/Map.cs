@@ -74,7 +74,7 @@ namespace Map
         }
 
         // Naive search, I think this is more than enough for this example, could be replaced with a flood-fill like
-        // GetReachableTiles to have it scale better if the number of actors increase
+        // GetTilesInRange to have it scale better if the number of actors increase
         public Actor FindClosestActor(
             Actor originActor,
             CharacterType? typeFilter = null)
@@ -143,15 +143,19 @@ namespace Map
         }
 
         // This uses a flood-fill algorithm to evaluate neighboring tiles until maxDistance is reached.
-        // Returns a dictionary of available tiles to move to and their distances from the actor.
-        public Dictionary<Tile, int> GetReachableTiles(
+        // Blocking types stop the search, while excluded types are traversed but omitted from the result.
+        public Dictionary<Tile, int> GetTilesInRange(
             Actor actor,
+            int minDistance,
             int maxDistance,
-            CharacterType? blockingType = null)
+            CharacterType? blockingType = null,
+            List<CharacterType> excludedTypes = null)
         {
             var result = new Dictionary<Tile, int>();
 
-            if (maxDistance <= 0 || !_actorPositions.TryGetValue(actor, out Tile start))
+            // If the range is invalid or the actor is not on the map there are no tiles to search
+            if (minDistance < 0 || maxDistance < minDistance ||
+                !_actorPositions.TryGetValue(actor, out Tile start))
                 return result;
 
             // New discovered tiles whose neighbors will be searched in the loop
@@ -163,6 +167,11 @@ namespace Map
             {
                 pending.Add(start);
                 distances.Add(start, 0);
+
+                // The actor tile itself is in range when the minimum distance is zero
+                // unless its type was explicitly excluded from the results
+                if (minDistance == 0 && !IsExcluded(start, excludedTypes))
+                    result.Add(start, 0);
 
                 // For each available tile we perform a breadth-first search in the 4 axis
                 for (int i = 0; i < pending.Count; i++)
@@ -197,14 +206,17 @@ namespace Map
                             neighbor.Actor.Definition.CharacterType == blockingType.Value)
                             continue;
 
+                        // Neighboring tiles are always one step farther away from the current tile
+                        int neighborDistance = distance + 1;
+
                         // Mark as already visited
-                        distances.Add(neighbor, distance + 1);
+                        distances.Add(neighbor, neighborDistance);
                         // We will search this tile's neighbors next
                         pending.Add(neighbor);
 
-                        // Finally, if this is empty is available to move to
-                        if (!neighbor.IsOccupied)
-                            result.Add(neighbor, distance + 1);
+                        // Do not add tiles before the minimum distance or tiles occupied by an excluded type
+                        if (neighborDistance >= minDistance && !IsExcluded(neighbor, excludedTypes))
+                            result.Add(neighbor, neighborDistance);
                     }
                 }
             }
@@ -216,6 +228,12 @@ namespace Map
 
             return result;
         }
+
+        // Empty tiles cannot be excluded since exclusions only apply to actor types
+        private static bool IsExcluded(Tile tile, List<CharacterType> excludedTypes) =>
+            tile.IsOccupied &&
+            excludedTypes != null &&
+            excludedTypes.Contains(tile.Actor.Definition.CharacterType);
 
         private bool IsInside(Vector2Int position) =>
             position.x >= 0 && position.x < Width && position.y >= 0 && position.y < Height;

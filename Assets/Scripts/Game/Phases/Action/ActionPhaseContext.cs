@@ -9,6 +9,8 @@ namespace Game.Phases.Action
     {
         public TurnContext Turn { get; }
         public Actors.Actions.Action SelectedAction { get; set; }
+        public IReadOnlyList<Actor> ValidTargets { get; set; }
+        public IReadOnlyList<Actor> SelectedTargets { get; set; }
 
         public ActionPhaseContext(TurnContext turn)
         {

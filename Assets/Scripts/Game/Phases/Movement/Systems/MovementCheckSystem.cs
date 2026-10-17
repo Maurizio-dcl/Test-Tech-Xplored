@@ -1,4 +1,7 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using Actors;
 using Map.Views;
 using UnityEngine;
 
@@ -6,6 +9,9 @@ namespace Game.Phases.Movement.Systems
 {
     public sealed class MovementCheckSystem : IMovementSystem
     {
+        private static readonly List<CharacterType> OccupiedTileTypes =
+            new((CharacterType[])Enum.GetValues(typeof(CharacterType)));
+
         private readonly MapView _mapView;
         private readonly Color _reachableTileColor;
 
@@ -28,10 +34,12 @@ namespace Game.Phases.Movement.Systems
             if (context.MovementStat.Value <= 0)
                 return MovementSystemStatus.EndPhase;
 
-            var reachableTiles = context.Turn.Map.GetReachableTiles(
+            var reachableTiles = context.Turn.Map.GetTilesInRange(
                 context.Turn.Actor,
+                1,
                 context.MovementStat.Value,
-                context.Turn.Actor.Definition.BlockingType);
+                context.Turn.Actor.Definition.BlockingType,
+                OccupiedTileTypes);
 
             context.ReachableTiles = reachableTiles;
 

@@ -18,6 +18,9 @@ namespace Actors.Actions
         [SerializeField] private Color backgroundColor;
 
         public int Cooldown => cooldown;
+        public int MinRange => minRange;
+        public int MaxRange => maxRange;
+        public Targeting Targeting => targeting;
         public Sprite Icon => icon;
         public Color BackgroundColor => backgroundColor;
 
