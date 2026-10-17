@@ -18,6 +18,7 @@ namespace Game.Phases.Action.Systems
         {
             _selectedAction = null;
             _endActionRequested = false;
+            _controlsView.SetupStats(context.Turn.Actor);
             _controlsView.SetupActions(context.Turn.Actor);
             _controlsView.ActionRequested += OnActionRequested;
             _controlsView.EndActionPhaseRequested += OnEndActionRequested;

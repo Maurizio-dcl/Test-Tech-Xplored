@@ -10,7 +10,8 @@ namespace Actors
         public enum StatTag
         {
             Movement,
-            Aggro
+            Aggro,
+            Hp
             // ...Add here new stat labels to define new "stats"
         }
 

@@ -8,6 +8,7 @@ namespace Game.Views
 {
     public sealed class ActorControlsView : MonoBehaviour
     {
+        [SerializeField] private ActorStatsView actorStatsView;
         [SerializeField] private ActionControlsView actionControlsView;
         
         [SerializeField] private Button endMovementPhaseButton;
@@ -43,6 +44,8 @@ namespace Game.Views
             endActionPhaseButton.onClick.RemoveListener(OnEndActionPhaseClicked);
             cancelActionButton.onClick.RemoveListener(OnCancelActionClicked);
         }
+
+        public void SetupStats(Actor actor) => actorStatsView.Setup(actor);
 
         public void SetupActions(Actor actor) => actionControlsView.Setup(actor);
 

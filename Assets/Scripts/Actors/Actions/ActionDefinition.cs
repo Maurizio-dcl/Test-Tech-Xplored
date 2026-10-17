@@ -3,9 +3,6 @@ using UnityEngine;
 
 namespace Actors.Actions
 {
-    [CreateAssetMenu(
-        fileName = "ActionDefinition",
-        menuName = "ScriptableObjects/TestTechXplored/Actor/Actions/ActionDefinition")]
     public abstract class ActionDefinition : ScriptableObject
     {
         [SerializeField] private string actionName;

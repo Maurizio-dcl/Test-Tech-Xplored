@@ -16,6 +16,7 @@ namespace Actors
 
         public int UniqueId => _uniqueId;
         public ActorDefinition Definition => _definition;
+        public IReadOnlyCollection<Stat> Stats => _stats.Values;
         public IReadOnlyList<Action> Actions => _actions;
 
         public Actor(int uniqueId, ActorDefinition definition)
