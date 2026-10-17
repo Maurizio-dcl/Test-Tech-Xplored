@@ -57,7 +57,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -254,6 +254,7 @@ GameObject:
   - component: {fileID: 1849791714873757802}
   - component: {fileID: 8688526461999780768}
   - component: {fileID: 7283019148030561134}
+  - component: {fileID: 7283019148030561135}
   m_Layer: 5
   m_Name: ActorControlsView
   m_TagString: Untagged
@@ -330,6 +331,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.ContentSizeFitter
   m_HorizontalFit: 2
   m_VerticalFit: 0
+--- !u!114 &7283019148030561135
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4558753300199286193}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5b9b96b5e5149ae9ac3307398e705a6, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Views.ActorControlsView
+  endMovementPhaseButton: {fileID: 4972296285838625171}
+  endActionPhaseButton: {fileID: 3257503253660373365}
+  cancelActionButton: {fileID: 3117136589332099506}
+  actionControlsView: {fileID: 9155659616159332951}
 --- !u!1 &5286627889945855645
 GameObject:
   m_ObjectHideFlags: 0
@@ -1129,5 +1146,10 @@ PrefabInstance:
 --- !u!224 &9155659616159332950 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2182629982671938859, guid: de6030af55de04b168d3b3371efc3117, type: 3}
+  m_PrefabInstance: {fileID: 7009058483934322557}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &9155659616159332951 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 262551065604255113, guid: de6030af55de04b168d3b3371efc3117, type: 3}
   m_PrefabInstance: {fileID: 7009058483934322557}
   m_PrefabAsset: {fileID: 0}

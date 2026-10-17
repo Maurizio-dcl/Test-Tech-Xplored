@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using Actors;
 using Game.Phases;
+using Game.Phases.Action;
+using Game.Phases.Action.Systems;
 using Game.Phases.Movement;
 using Game.Phases.Movement.Systems;
 using Game.Turns;
@@ -14,7 +16,7 @@ namespace Game
     public sealed class GameLoop : MonoBehaviour
     {
         [SerializeField] private MapView mapView;
-        [SerializeField] private MovementControlsView movementControlsView;
+        [SerializeField] private ActorControlsView actorControlsView;
         [SerializeField] private BossSpawnsDefinition bossSpawnsDefinition;
 
         [SerializeField] private Color reachableTileColor = Color.green;
@@ -78,8 +80,9 @@ namespace Game
         {
             // Initialize new phases here
             MovementPhase movementPhase = InitializeMovementPhase();
+            ActionPhase actionPhase = InitializeActionPhase();
 
-            List<ITurnPhase> phases = new List<ITurnPhase> { movementPhase };
+            List<ITurnPhase> phases = new List<ITurnPhase> { movementPhase, actionPhase };
 
             _turnDirector = new TurnDirector(
                 _map,
@@ -98,11 +101,24 @@ namespace Game
             IMovementSystem[] repeatingMovementSystems = new IMovementSystem[]
             {
                 new MovementCheckSystem(mapView, reachableTileColor),
-                new MovementSelectionSystem(mapView, movementControlsView),
+                new MovementSelectionSystem(mapView, actorControlsView),
                 new MovementExecuteSystem()
             };
 
             return new(mapView, movementSystems, repeatingMovementSystems);
+        }
+
+        private ActionPhase InitializeActionPhase()
+        {
+            IActionSystem[] actionSystems = {
+                new CooldownMaintenanceSystem()
+            };
+
+            IActionSystem[] repeatingActionSystems = {
+                new ActionSelectionSystem(actorControlsView)
+            };
+
+            return new(mapView, actionSystems, repeatingActionSystems);
         }
     }
 }

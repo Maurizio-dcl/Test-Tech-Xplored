@@ -7,13 +7,13 @@ namespace Game.Phases.Movement.Systems
     public sealed class MovementSelectionSystem : IMovementSystem
     {
         private readonly MapView _mapView;
-        private readonly MovementControlsView _controlsView;
+        private readonly ActorControlsView _controlsView;
 
         private MovementPhaseContext _context;
         private Tile _selectedTile;
         private bool _endMovementRequested;
 
-        public MovementSelectionSystem(MapView mapView, MovementControlsView controlsView)
+        public MovementSelectionSystem(MapView mapView, ActorControlsView controlsView)
         {
             _mapView = mapView;
             _controlsView = controlsView;
@@ -26,7 +26,7 @@ namespace Game.Phases.Movement.Systems
             _endMovementRequested = false;
             // Enable movement inputs only while this system is running
             _mapView.TileClicked += OnTileClicked;
-            _controlsView.EndMovementRequested += OnEndMovementRequested;
+            _controlsView.EndMovementPhaseRequested += OnEndMovementRequested;
             _controlsView.SetEndMovementAvailable(true);
         }
 
@@ -45,7 +45,7 @@ namespace Game.Phases.Movement.Systems
         public void Exit(MovementPhaseContext context)
         {
             _mapView.TileClicked -= OnTileClicked;
-            _controlsView.EndMovementRequested -= OnEndMovementRequested;
+            _controlsView.EndMovementPhaseRequested -= OnEndMovementRequested;
             _controlsView.SetEndMovementAvailable(false);
             _mapView.ClearTilesColor();
             _context = null;

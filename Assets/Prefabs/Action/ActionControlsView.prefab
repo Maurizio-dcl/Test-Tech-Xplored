@@ -338,6 +338,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd5feb47d87448049a914866f8868771, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.Views.ActionControlsView
+  actionViewPrefab: {fileID: 8216987232938489035, guid: b22e0244830d64fd18f8c8f8ac3d0796, type: 3}
+  actionsContainer: {fileID: 9093163995845015859}
 --- !u!1001 &2304436733504607522
 PrefabInstance:
   m_ObjectHideFlags: 0

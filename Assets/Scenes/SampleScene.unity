@@ -663,7 +663,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.GameLoop
   mapView: {fileID: 37977819}
-  movementControlsView: {fileID: 100000205}
+  actorControlsView: {fileID: 317095371}
   bossSpawnsDefinition: {fileID: 11400000, guid: 9956619ef71fc47b695780835126b4b2, type: 2}
   reachableTileColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!4 &157985361
@@ -684,6 +684,11 @@ Transform:
 --- !u!224 &317095370 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2182629982671938859, guid: 99e4235ec61bd4821b716216bc891332, type: 3}
+  m_PrefabInstance: {fileID: 1943647002}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &317095371 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7283019148030561135, guid: 99e4235ec61bd4821b716216bc891332, type: 3}
   m_PrefabInstance: {fileID: 1943647002}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &519420028

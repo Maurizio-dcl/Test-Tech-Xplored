@@ -4,13 +4,13 @@ namespace Game.Phases.Action.Systems
 {
     public sealed class ActionSelectionSystem : IActionSystem
     {
-        private readonly ActionControlsView _controlsView;
+        private readonly ActorControlsView _controlsView;
 
         private ActionPhaseContext _context;
         private Actors.Actions.Action _selectedAction;
         private bool _endActionRequested;
 
-        public ActionSelectionSystem(ActionControlsView controlsView)
+        public ActionSelectionSystem(ActorControlsView controlsView)
         {
             _controlsView = controlsView;
         }
@@ -20,9 +20,10 @@ namespace Game.Phases.Action.Systems
             _context = context;
             _selectedAction = null;
             _endActionRequested = false;
-            // _controlsView.ActionClicked += OnActionClicked;
-            // _controlsView.EndActionRequested += OnEndActionRequested;
-            // _controlsView.SetEndActionAvailable(true);
+            _controlsView.SetupActions(context.Turn.Actor);
+            _controlsView.ActionRequested += OnActionRequested;
+            _controlsView.EndActionPhaseRequested += OnEndActionRequested;
+            _controlsView.SetEndActionAvailable(true);
         }
 
         public ActionSystemStatus Tick(ActionPhaseContext context)
@@ -39,13 +40,13 @@ namespace Game.Phases.Action.Systems
 
         public void Exit(ActionPhaseContext context)
         {
-            // _controlsView.ActionClicked -= OnActionClicked;
-            // _controlsView.EndActionRequested -= OnEndActionRequested;
-            // _controlsView.SetEndActionAvailable(false);
+            _controlsView.ActionRequested -= OnActionRequested;
+            _controlsView.EndActionPhaseRequested -= OnEndActionRequested;
+            _controlsView.SetEndActionAvailable(false);
             _context = null;
         }
         
-        private void OnActionClicked(Actors.Actions.Action action)
+        private void OnActionRequested(Actors.Actions.Action action)
         {
             if (action.IsAvailable)
                 _selectedAction = action;
