@@ -73,6 +73,17 @@ namespace Map
             return true;
         }
 
+        public bool TryGetActorTile(Actor actor, out Tile tile)
+        {
+            if (actor == null)
+            {
+                tile = null;
+                return false;
+            }
+
+            return _actorPositions.TryGetValue(actor, out tile);
+        }
+
         // Naive search, I think this is more than enough for this example, could be replaced with a flood-fill like
         // GetTilesInRange to have it scale better if the number of actors increase
         public Actor FindClosestActor(

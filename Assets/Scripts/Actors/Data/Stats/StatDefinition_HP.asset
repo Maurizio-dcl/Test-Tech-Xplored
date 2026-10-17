@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5eaea1ec58e44376a1cc4faeb49fd1cb, type: 3}
   m_Name: StatDefinition_HP
   m_EditorClassIdentifier: Assembly-CSharp::Actors.StatDefinition
-  tag: 0
-  isVisible: 0
+  tag: 2
+  isVisible: 1

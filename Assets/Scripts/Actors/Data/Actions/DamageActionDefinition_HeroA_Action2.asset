@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1060bb4403d45868ff8d344c9ac6328, type: 3}
   m_Name: DamageActionDefinition_HeroA_Action2
   m_EditorClassIdentifier: Assembly-CSharp::Actors.Actions.DamageActionDefinition
-  actionName: Hero A - Action A
+  actionName: Hero A - Action 2
   actionDescription: "Attacco melee da 3 danni pi\xF9 1d6"
   cooldown: 0
   minRange: 1
@@ -22,6 +22,6 @@ MonoBehaviour:
     hasTypeFilter: 1
     typeFilter: 1
   icon: {fileID: 21300000, guid: 88628e54821cb420e9daa58504dd893f, type: 3}
-  backgroundColor: {r: 0.78431374, g: 0.0627451, b: 0.18039216, a: 0}
+  backgroundColor: {r: 0.78431374, g: 0.0627451, b: 0.18039216, a: 1}
   baseDamage: 3
   bonusDamageDie: 6

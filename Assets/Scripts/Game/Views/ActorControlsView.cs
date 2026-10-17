@@ -15,11 +15,13 @@ namespace Game.Views
 
         [SerializeField] private Button endActionPhaseButton;
         [SerializeField] private Button cancelActionButton;
+        [SerializeField] private Button confirmTargetsButton;
 
         public event Action EndMovementPhaseRequested;
 
         public event Action EndActionPhaseRequested;
         public event Action CancelActionRequested;
+        public event Action ConfirmTargetsRequested;
         public event Action<ActorAction> ActionRequested;
 
         private void Awake()
@@ -33,6 +35,8 @@ namespace Game.Views
             SetEndActionAvailable(false);
             cancelActionButton.onClick.AddListener(OnCancelActionClicked);
             SetCancelActionAvailable(false);
+            confirmTargetsButton.onClick.AddListener(OnConfirmTargetsClicked);
+            SetConfirmTargetsAvailable(false);
         }
 
         private void OnDestroy()
@@ -43,6 +47,7 @@ namespace Game.Views
 
             endActionPhaseButton.onClick.RemoveListener(OnEndActionPhaseClicked);
             cancelActionButton.onClick.RemoveListener(OnCancelActionClicked);
+            confirmTargetsButton.onClick.RemoveListener(OnConfirmTargetsClicked);
         }
 
         public void SetupStats(Actor actor) => actorStatsView.Setup(actor);
@@ -69,9 +74,16 @@ namespace Game.Views
             cancelActionButton.gameObject.SetActive(available);
         }
 
+        public void SetConfirmTargetsAvailable(bool available)
+        {
+            confirmTargetsButton.interactable = available;
+            confirmTargetsButton.gameObject.SetActive(available);
+        }
+
         private void OnEndMovementPhaseClicked() => EndMovementPhaseRequested?.Invoke();
         private void OnEndActionPhaseClicked() => EndActionPhaseRequested?.Invoke();
         private void OnCancelActionClicked() => CancelActionRequested?.Invoke();
+        private void OnConfirmTargetsClicked() => ConfirmTargetsRequested?.Invoke();
         private void OnActionRequested(ActorAction action) => ActionRequested?.Invoke(action);
     }
 }

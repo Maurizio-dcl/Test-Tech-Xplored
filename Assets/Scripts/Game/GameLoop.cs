@@ -129,7 +129,8 @@ namespace Game
             IActionSystem[] repeatingActionSystems = {
                 new ActionSelectionSystem(actorControlsView),
                 new ActionTargetCheckSystem(),
-                new ActionTargetSelectionSystem(mapView, targetableTileColor),
+                new ActionTargetSelectionSystem(mapView, actorControlsView, targetableTileColor),
+                new ActionTargetConfirmationSystem(mapView, actorControlsView, targetableTileColor),
                 new ActionSystemLoggingDecorator(new ActionExecuteSystem(), logSink)
             };
 

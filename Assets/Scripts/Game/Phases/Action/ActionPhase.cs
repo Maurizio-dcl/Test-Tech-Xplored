@@ -66,6 +66,16 @@ namespace Game.Phases.Action
             if (status == ActionSystemStatus.EndPhase)
                 return TurnPhaseStatus.Complete;
 
+            // Not elegant, as mentioned in the MovementPhase class this could be better handled with another
+            // nested state machine
+            if (status == ActionSystemStatus.CancelAction)
+            {
+                _systems = _repeatingSystems;
+                _systemIndex = 0;
+                _runningSetupSystems = false;
+                return TurnPhaseStatus.Running;
+            }
+
             _systemIndex++;
 
             if (!_runningSetupSystems && _systemIndex >= _systems.Count)

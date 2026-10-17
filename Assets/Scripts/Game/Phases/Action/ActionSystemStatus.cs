@@ -4,6 +4,7 @@ namespace Game.Phases.Action
     {
         Running,
         Complete,
+        CancelAction,
         EndPhase
     }
 }

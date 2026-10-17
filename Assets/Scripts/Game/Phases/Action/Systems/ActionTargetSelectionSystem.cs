@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Actors;
 using Actors.Actions;
+using Game.Views;
 using Map;
 using Map.Views;
 using UnityEngine;
@@ -12,21 +13,28 @@ namespace Game.Phases.Action.Systems
     public sealed class ActionTargetSelectionSystem : IActionSystem
     {
         private readonly MapView _mapView;
+        private readonly ActorControlsView _controlsView;
         private readonly Color _targetableTileColor;
         private readonly Dictionary<Tile, Actor> _targetsByTile = new();
 
         private Actor _selectedTarget;
         private bool _selectionRequired;
+        private bool _cancelActionRequested;
 
-        public ActionTargetSelectionSystem(MapView mapView, Color targetableTileColor)
+        public ActionTargetSelectionSystem(
+            MapView mapView,
+            ActorControlsView controlsView,
+            Color targetableTileColor)
         {
             _mapView = mapView;
+            _controlsView = controlsView;
             _targetableTileColor = targetableTileColor;
         }
 
         public void Enter(ActionPhaseContext context)
         {
             _selectedTarget = null;
+            _cancelActionRequested = false;
             _targetsByTile.Clear();
 
             IReadOnlyList<Actor> validTargets = context.ValidTargets;
@@ -56,12 +64,17 @@ namespace Game.Phases.Action.Systems
             _mapView.ClearTilesColor();
             _mapView.SetTilesColor(_targetsByTile.Keys.ToHashSet(), _targetableTileColor);
             _mapView.TileClicked += OnTileClicked;
+            _controlsView.CancelActionRequested += OnCancelActionRequested;
+            _controlsView.SetCancelActionAvailable(true);
         }
 
         public ActionSystemStatus Tick(ActionPhaseContext context)
         {
             if (!_selectionRequired)
                 return ActionSystemStatus.Complete;
+
+            if (_cancelActionRequested)
+                return ActionSystemStatus.CancelAction;
 
             if (_selectedTarget == null)
                 return ActionSystemStatus.Running;
@@ -73,12 +86,17 @@ namespace Game.Phases.Action.Systems
         public void Exit(ActionPhaseContext context)
         {
             if (_selectionRequired)
+            {
                 _mapView.TileClicked -= OnTileClicked;
+                _controlsView.CancelActionRequested -= OnCancelActionRequested;
+                _controlsView.SetCancelActionAvailable(false);
+            }
 
             _mapView.ClearTilesColor();
             _targetsByTile.Clear();
             _selectedTarget = null;
             _selectionRequired = false;
+            _cancelActionRequested = false;
         }
 
         private void OnTileClicked(Tile tile)
@@ -86,5 +104,7 @@ namespace Game.Phases.Action.Systems
             if (_targetsByTile.TryGetValue(tile, out Actor target))
                 _selectedTarget = target;
         }
+
+        private void OnCancelActionRequested() => _cancelActionRequested = true;
     }
 }

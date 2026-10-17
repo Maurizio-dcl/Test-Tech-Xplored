@@ -21,4 +21,10 @@ MonoBehaviour:
     minValue: 0
     maxValue: 3
     initialValue: 3
+  - definition: {fileID: 11400000, guid: 5c54de76f2f9a4739b58877a2a556db9, type: 2}
+    minValue: 0
+    maxValue: 50
+    initialValue: 50
+  actionDefinitions:
+  - {fileID: 11400000, guid: b8a5987a338ab4da28445f17e6a2a600, type: 2}
   visuals: {fileID: 4558753300199286193, guid: d2a8a74ddfe964729a696d7937a39cf8, type: 3}
