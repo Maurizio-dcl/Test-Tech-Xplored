@@ -1,3 +1,4 @@
+using Game.Phases.Action;
 using UnityEngine;
 
 namespace Actors.Actions
@@ -24,7 +25,6 @@ namespace Actors.Actions
         public Sprite Icon => icon;
         public Color BackgroundColor => backgroundColor;
 
-        // TODO pass down action context to Execute (coming from system)
-        public abstract void Execute();
+        public abstract void Execute(ActionPhaseContext context);
     }
 }
