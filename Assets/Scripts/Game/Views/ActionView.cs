@@ -30,7 +30,7 @@ namespace Game.Views
 
         private void OnDestroy() => button.onClick.RemoveListener(OnButtonClick);
 
-        private void Refresh()
+        public void Refresh()
         {
             buttonImage.color = _action.Definition.BackgroundColor;
             iconImage.sprite = _action.Definition.Icon;

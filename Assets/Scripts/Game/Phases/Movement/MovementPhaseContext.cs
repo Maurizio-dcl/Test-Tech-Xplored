@@ -15,6 +15,8 @@ namespace Game.Phases.Movement
         public MovementPhaseContext(TurnContext turn)
         {
             Turn = turn;
+            turn.Actor.TryGetStat(StatDefinition.StatTag.Movement, out Stat movementStat);
+            MovementStat = movementStat;
         }
     }
 }

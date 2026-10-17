@@ -40,6 +40,12 @@ namespace Game.Views
             }
         }
 
+        public void Refresh()
+        {
+            for (int i = 0; i < _actionViews.Count; i++)
+                _actionViews[i].Refresh();
+        }
+
         private void ClearActionViews()
         {
             for (int i = 0; i < _actionViews.Count; i++)

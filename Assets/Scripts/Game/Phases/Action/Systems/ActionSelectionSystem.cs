@@ -18,8 +18,7 @@ namespace Game.Phases.Action.Systems
         {
             _selectedAction = null;
             _endActionRequested = false;
-            _controlsView.SetupStats(context.Turn.Actor);
-            _controlsView.SetupActions(context.Turn.Actor);
+            _controlsView.RefreshActions();
             _controlsView.ActionRequested += OnActionRequested;
             _controlsView.EndActionPhaseRequested += OnEndActionRequested;
             _controlsView.SetEndActionAvailable(true);
@@ -27,6 +26,9 @@ namespace Game.Phases.Action.Systems
 
         public ActionSystemStatus Tick(ActionPhaseContext context)
         {
+            if (context.Turn.Actor.Actions.Count == 0)
+                return ActionSystemStatus.EndPhase;
+
             if (_endActionRequested)
                 return ActionSystemStatus.EndPhase;
 

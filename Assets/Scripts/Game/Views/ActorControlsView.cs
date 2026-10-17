@@ -49,6 +49,8 @@ namespace Game.Views
 
         public void SetupActions(Actor actor) => actionControlsView.Setup(actor);
 
+        public void RefreshActions() => actionControlsView.Refresh();
+
         public void SetEndMovementAvailable(bool available)
         {
             endMovementPhaseButton.interactable = available;

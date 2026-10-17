@@ -30,8 +30,8 @@ namespace Game.Phases.Movement.Systems
             // Remove the result of the previous movement action before calculating a new one.
             _mapView.ClearTilesColor();
 
-            // And if we cannot move at all end this phase
-            if (context.MovementStat.Value <= 0)
+            // Actors without a movement stat cannot take part in this phase.
+            if (context.MovementStat == null || context.MovementStat.Value <= 0)
                 return MovementSystemStatus.EndPhase;
 
             var reachableTiles = context.Turn.Map.GetTilesInRange(

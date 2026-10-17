@@ -4,6 +4,8 @@ using Game.Logging;
 using Game.Phases;
 using Game.Phases.Action;
 using Game.Phases.Action.Systems;
+using Game.Phases.Maintenance;
+using Game.Phases.Maintenance.Systems;
 using Game.Phases.Movement;
 using Game.Phases.Movement.Systems;
 using Game.Turns;
@@ -83,10 +85,11 @@ namespace Game
             ILogSink logSink = new UnityConsoleLogSink();
 
             // Initialize new phases here
+            MaintenancePhase maintenancePhase = InitializeMaintenancePhase();
             MovementPhase movementPhase = InitializeMovementPhase(logSink);
             ActionPhase actionPhase = InitializeActionPhase(logSink);
 
-            List<ITurnPhase> phases = new List<ITurnPhase> { movementPhase, actionPhase };
+            List<ITurnPhase> phases = new List<ITurnPhase> { maintenancePhase, movementPhase, actionPhase };
 
             _turnDirector = new TurnDirector(
                 _map,
@@ -94,13 +97,20 @@ namespace Game
                 phases);
         }
 
+        private MaintenancePhase InitializeMaintenancePhase()
+        {
+            IMaintenanceSystem[] maintenanceSystems =
+            {
+                new MovementMaintenanceSystem(),
+                new ActionMaintenanceSystem(actorControlsView)
+            };
+
+            return new(maintenanceSystems);
+        }
+
         private MovementPhase InitializeMovementPhase(ILogSink logSink)
         {
-            // Initialize new movement systems here
-            IMovementSystem[] movementSystems = new IMovementSystem[]
-            {
-                new MovementMaintenanceSystem()
-            };
+            IMovementSystem[] movementSystems = { };
 
             IMovementSystem[] repeatingMovementSystems = new IMovementSystem[]
             {
@@ -114,9 +124,7 @@ namespace Game
 
         private ActionPhase InitializeActionPhase(ILogSink logSink)
         {
-            IActionSystem[] actionSystems = {
-                new CooldownMaintenanceSystem()
-            };
+            IActionSystem[] actionSystems = { };
 
             IActionSystem[] repeatingActionSystems = {
                 new ActionSelectionSystem(actorControlsView),
