@@ -4,7 +4,9 @@ namespace Game.Phases.Movement.Systems
 {
     public sealed class MovementExecuteSystem : IMovementSystem
     {
-        public void Enter(MovementPhaseContext context) { }
+        public void Enter(MovementPhaseContext context)
+        {
+        }
 
         public MovementSystemStatus Tick(MovementPhaseContext context)
         {
@@ -32,6 +34,8 @@ namespace Game.Phases.Movement.Systems
                 : MovementSystemStatus.EndPhase;
         }
 
-        public void Exit(MovementPhaseContext context) { }
+        public void Exit(MovementPhaseContext context)
+        {
+        }
     }
 }

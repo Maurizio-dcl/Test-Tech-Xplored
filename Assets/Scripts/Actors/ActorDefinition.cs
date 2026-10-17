@@ -19,7 +19,7 @@ namespace Actors
 
         [SerializeField] private List<StatConfiguration> statConfigurations = new();
         
-        [SerializeField] private List<ActionDefinition> actions = new();
+        [SerializeField] private List<ActionDefinition> actionDefinitions = new();
 
         [SerializeField] private GameObject visuals;
 
@@ -27,7 +27,7 @@ namespace Actors
         public CharacterType CharacterType => characterType;
         public CharacterType? BlockingType => hasBlockingType ? blockingType : null;
         public IReadOnlyList<StatConfiguration> StatConfigurations => statConfigurations;
-        public IReadOnlyList<ActionDefinition> Actions => actions;
+        public IReadOnlyList<ActionDefinition> ActionDefinitions => actionDefinitions;
         public GameObject Visuals => visuals;
     }
 }

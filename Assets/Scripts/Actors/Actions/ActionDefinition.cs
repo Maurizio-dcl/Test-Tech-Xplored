@@ -14,9 +14,12 @@ namespace Actors.Actions
         [SerializeField] private int minRange;
         [SerializeField] private int maxRange;
         [SerializeField] private Targeting targeting;
-        [SerializeField] private GameObject visuals;
+        [SerializeField] private Sprite icon;
+        [SerializeField] private Color backgroundColor;
 
         public int Cooldown => cooldown;
+        public Sprite Icon => icon;
+        public Color BackgroundColor => backgroundColor;
 
         // TODO pass down action context to Execute (coming from system)
         public abstract void Execute();

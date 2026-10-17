@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using Actors.Actions;
 using static Actors.StatDefinition;
+using Action = Actors.Actions.Action;
 
 namespace Actors
 {
@@ -10,9 +12,11 @@ namespace Actors
         private readonly ActorDefinition _definition;
 
         private readonly Dictionary<StatTag, Stat> _stats = new();
+        private readonly List<Action> _actions = new();
 
         public int UniqueId => _uniqueId;
         public ActorDefinition Definition => _definition;
+        public IReadOnlyList<Action> Actions => _actions;
 
         public Actor(int uniqueId, ActorDefinition definition)
         {
@@ -22,16 +26,22 @@ namespace Actors
             _uniqueId = uniqueId;
             _definition = definition;
 
-            foreach (var config in definition.StatConfigurations)
+            foreach (StatConfiguration statConfiguration in definition.StatConfigurations)
             {
-                if (config.Definition == null)
+                if (statConfiguration.Definition == null)
                     throw new ArgumentException($"Actor '{definition.name}' has a stat without a definition.");
 
-                var stat = new Stat(config);
-                StatTag tag = config.Definition.Tag;
+                Stat stat = new Stat(statConfiguration);
+                StatTag tag = statConfiguration.Definition.Tag;
 
                 if (!_stats.TryAdd(tag, stat))
                     throw new ArgumentException($"Actor '{definition.name}' has more than one stat tagged '{tag}'.");
+            }
+
+            foreach (ActionDefinition actionDefinition in definition.ActionDefinitions)
+            {
+                Action action = new Action(actionDefinition);
+                _actions.Add(action);
             }
         }
 

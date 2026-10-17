@@ -7,6 +7,7 @@ namespace Actors.Actions
         public int CooldownValue { get; private set; }
         public int MaxCooldown { get; }
         public ActionDefinition Definition { get; }
+        public bool IsAvailable => CooldownValue == 0;
 
         public Action(ActionDefinition definition)
         {
