@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Actors;
+using Game.Logging;
 using Game.Phases;
 using Game.Phases.Action;
 using Game.Phases.Action.Systems;
@@ -79,9 +80,11 @@ namespace Game
 
         private void InitializeTurnDirector(List<Actor> actors)
         {
+            ILogSink logSink = new UnityConsoleLogSink();
+
             // Initialize new phases here
-            MovementPhase movementPhase = InitializeMovementPhase();
-            ActionPhase actionPhase = InitializeActionPhase();
+            MovementPhase movementPhase = InitializeMovementPhase(logSink);
+            ActionPhase actionPhase = InitializeActionPhase(logSink);
 
             List<ITurnPhase> phases = new List<ITurnPhase> { movementPhase, actionPhase };
 
@@ -91,7 +94,7 @@ namespace Game
                 phases);
         }
 
-        private MovementPhase InitializeMovementPhase()
+        private MovementPhase InitializeMovementPhase(ILogSink logSink)
         {
             // Initialize new movement systems here
             IMovementSystem[] movementSystems = new IMovementSystem[]
@@ -103,13 +106,13 @@ namespace Game
             {
                 new MovementCheckSystem(mapView, reachableTileColor),
                 new MovementSelectionSystem(mapView, actorControlsView),
-                new MovementExecuteSystem()
+                new MovementSystemLoggingDecorator(new MovementExecuteSystem(), logSink)
             };
 
             return new(mapView, movementSystems, repeatingMovementSystems);
         }
 
-        private ActionPhase InitializeActionPhase()
+        private ActionPhase InitializeActionPhase(ILogSink logSink)
         {
             IActionSystem[] actionSystems = {
                 new CooldownMaintenanceSystem()
@@ -119,7 +122,7 @@ namespace Game
                 new ActionSelectionSystem(actorControlsView),
                 new ActionTargetCheckSystem(),
                 new ActionTargetSelectionSystem(mapView, targetableTileColor),
-                new ActionExecuteSystem()
+                new ActionSystemLoggingDecorator(new ActionExecuteSystem(), logSink)
             };
 
             return new(mapView, actionSystems, repeatingActionSystems);
