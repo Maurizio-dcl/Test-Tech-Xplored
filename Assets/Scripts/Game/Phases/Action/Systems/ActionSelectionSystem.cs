@@ -6,7 +6,6 @@ namespace Game.Phases.Action.Systems
     {
         private readonly ActorControlsView _controlsView;
 
-        private ActionPhaseContext _context;
         private Actors.Actions.Action _selectedAction;
         private bool _endActionRequested;
 
@@ -17,7 +16,6 @@ namespace Game.Phases.Action.Systems
         
         public void Enter(ActionPhaseContext context)
         {
-            _context = context;
             _selectedAction = null;
             _endActionRequested = false;
             _controlsView.SetupActions(context.Turn.Actor);
@@ -43,7 +41,6 @@ namespace Game.Phases.Action.Systems
             _controlsView.ActionRequested -= OnActionRequested;
             _controlsView.EndActionPhaseRequested -= OnEndActionRequested;
             _controlsView.SetEndActionAvailable(false);
-            _context = null;
         }
         
         private void OnActionRequested(Actors.Actions.Action action)
