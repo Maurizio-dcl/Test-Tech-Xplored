@@ -5,6 +5,8 @@ namespace Actors
 {
     public sealed class Stat
     {
+        public event Action ValueChanged;
+
         public StatDefinition Definition { get; }
         public int MinValue { get; }
         public int MaxValue { get; }
@@ -30,6 +32,14 @@ namespace Actors
 
         public void Modify(int amount) => SetValue(Math.Clamp(Value + amount, MinValue, MaxValue));
 
-        private void SetValue(int value) => Value = Mathf.Clamp(value, MinValue, MaxValue);
+        private void SetValue(int value)
+        {
+            int clampedValue = Mathf.Clamp(value, MinValue, MaxValue);
+            if (Value == clampedValue)
+                return;
+
+            Value = clampedValue;
+            ValueChanged?.Invoke();
+        }
     }
 }
