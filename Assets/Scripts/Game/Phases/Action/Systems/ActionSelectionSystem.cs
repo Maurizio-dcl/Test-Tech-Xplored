@@ -18,6 +18,7 @@ namespace Game.Phases.Action.Systems
         {
             _selectedAction = null;
             _endActionRequested = false;
+            _controlsView.ResetActionDescription();
             _controlsView.RefreshActions();
             _controlsView.ActionRequested += OnActionRequested;
             _controlsView.EndActionPhaseRequested += OnEndActionRequested;

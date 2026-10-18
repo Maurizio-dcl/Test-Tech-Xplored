@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
 using Actors;
+using TMPro;
 using UnityEngine;
 
 namespace Game.Views
 {
     public sealed class ActorStatsView : MonoBehaviour
     {
+        [SerializeField] private TMP_Text actorName;
         [SerializeField] private StatView statViewPrefab;
         [SerializeField] private Transform statsContainer;
 
@@ -18,6 +20,8 @@ namespace Game.Views
         {
             if (actor == null)
                 throw new ArgumentNullException(nameof(actor));
+
+            actorName.text = actor.Definition.GivenName;
 
             ClearStatViews();
 
