@@ -5,15 +5,15 @@ namespace Actors.Actions
 {
     public abstract class ActionDefinition : ScriptableObject
     {
-        [SerializeField] private string actionName;
-        [SerializeField] private string actionDescription;
-        [SerializeField] private int cooldown;
+        [SerializeField] private string actionName = "default name";
+        [SerializeField] private string actionDescription = "default description";
+        [SerializeField] private int cooldown = 0;
         // 0 = self, 1 = melee, 2+ = ranged
-        [SerializeField] private int minRange;
-        [SerializeField] private int maxRange;
-        [SerializeField] private Targeting targeting;
+        [SerializeField] private int minRange = 0;
+        [SerializeField] private int maxRange = 0;
+        [SerializeField] private Targeting targeting = new(TargetingMode.Single, true, CharacterType.Boss);
         [SerializeField] private Sprite icon;
-        [SerializeField] private Color backgroundColor;
+        [SerializeField] private Color backgroundColor = Color.black;
 
         public string ActionName => actionName;
         public string ActionDescription => actionDescription;

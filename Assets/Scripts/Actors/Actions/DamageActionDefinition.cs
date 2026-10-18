@@ -12,12 +12,12 @@ namespace Actors.Actions
         menuName = "ScriptableObjects/TestTechXplored/Actor/Actions/DamageActionDefinition")]
     public sealed class DamageActionDefinition : ActionDefinition
     {
-        [SerializeField] private int baseDamage;
-        [SerializeField] private Die bonusDamageDie;
+        [SerializeField] private int baseDamage = 1;
+        [SerializeField] private DiceExpression bonusDamageDiceExpression = new(1, Die.D2);
 
         public override ActionOutcome Execute(ActionPhaseContext context)
         {
-            int bonusDamage = DiceRoller.Roll(new DiceExpression(1, bonusDamageDie)).Total;
+            int bonusDamage = DiceRoller.Roll(bonusDamageDiceExpression).Total;
             int damage = baseDamage + bonusDamage;
             IReadOnlyList<Actor> targets = context.SelectedTargets;
             List<IActionEffect> effects = new();
