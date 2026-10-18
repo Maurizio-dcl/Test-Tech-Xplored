@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Actors;
 using Actors.Actions;
+using Game.Input;
 using Game.Views;
 using Map;
 using Map.Views;
@@ -14,9 +15,11 @@ namespace Game.Phases.Action.Systems
     {
         private readonly MapView _mapView;
         private readonly ActorControlsView _controlsView;
+        private readonly IActorInputResolver _inputResolver;
         private readonly Color _targetableTileColor;
         private readonly Dictionary<Tile, Actor> _targetsByTile = new();
 
+        private IActorInput _input;
         private Actor _selectedTarget;
         private bool _selectionRequired;
         private bool _cancelActionRequested;
@@ -24,10 +27,12 @@ namespace Game.Phases.Action.Systems
         public ActionTargetSelectionSystem(
             MapView mapView,
             ActorControlsView controlsView,
+            IActorInputResolver inputResolver,
             Color targetableTileColor)
         {
             _mapView = mapView;
             _controlsView = controlsView;
+            _inputResolver = inputResolver;
             _targetableTileColor = targetableTileColor;
         }
 
@@ -44,6 +49,8 @@ namespace Game.Phases.Action.Systems
 
             if (!_selectionRequired)
                 return;
+
+            _input = _inputResolver.Resolve(context.Turn.Actor);
 
             // Get targets tiles to highlight (nothing blocks the flood fill and all occupied tiles are allowed
             ActionDefinition definition = context.SelectedAction.Definition;
@@ -63,8 +70,8 @@ namespace Game.Phases.Action.Systems
 
             _mapView.ClearTilesColor();
             _mapView.SetTilesColor(_targetsByTile.Keys.ToHashSet(), _targetableTileColor);
-            _mapView.TileClicked += OnTileClicked;
-            _controlsView.CancelActionRequested += OnCancelActionRequested;
+            _input.TileSelected += OnTileSelected;
+            _input.CancelActionRequested += OnCancelActionRequested;
             _controlsView.SetCancelActionAvailable(true);
         }
 
@@ -87,19 +94,20 @@ namespace Game.Phases.Action.Systems
         {
             if (_selectionRequired)
             {
-                _mapView.TileClicked -= OnTileClicked;
-                _controlsView.CancelActionRequested -= OnCancelActionRequested;
+                _input.TileSelected -= OnTileSelected;
+                _input.CancelActionRequested -= OnCancelActionRequested;
                 _controlsView.SetCancelActionAvailable(false);
             }
 
             _mapView.ClearTilesColor();
             _targetsByTile.Clear();
             _selectedTarget = null;
+            _input = null;
             _selectionRequired = false;
             _cancelActionRequested = false;
         }
 
-        private void OnTileClicked(Tile tile)
+        private void OnTileSelected(Tile tile)
         {
             if (_targetsByTile.TryGetValue(tile, out Actor target))
                 _selectedTarget = target;

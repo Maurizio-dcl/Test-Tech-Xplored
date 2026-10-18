@@ -1,3 +1,4 @@
+using Game.Input;
 using Game.Views;
 using Map;
 using Map.Views;
@@ -8,25 +9,32 @@ namespace Game.Phases.Movement.Systems
     {
         private readonly MapView _mapView;
         private readonly ActorControlsView _controlsView;
+        private readonly IActorInputResolver _inputResolver;
 
         private MovementPhaseContext _context;
+        private IActorInput _input;
         private Tile _selectedTile;
         private bool _endMovementRequested;
 
-        public MovementSelectionSystem(MapView mapView, ActorControlsView controlsView)
+        public MovementSelectionSystem(
+            MapView mapView,
+            ActorControlsView controlsView,
+            IActorInputResolver inputResolver)
         {
             _mapView = mapView;
             _controlsView = controlsView;
+            _inputResolver = inputResolver;
         }
 
         public void Enter(MovementPhaseContext context)
         {
             _context = context;
+            _input = _inputResolver.Resolve(context.Turn.Actor);
             _selectedTile = null;
             _endMovementRequested = false;
             // Enable movement inputs only while this system is running
-            _mapView.TileClicked += OnTileClicked;
-            _controlsView.EndMovementPhaseRequested += OnEndMovementRequested;
+            _input.TileSelected += OnTileSelected;
+            _input.EndMovementRequested += OnEndMovementRequested;
             _controlsView.SetEndMovementAvailable(true);
         }
 
@@ -44,14 +52,15 @@ namespace Game.Phases.Movement.Systems
 
         public void Exit(MovementPhaseContext context)
         {
-            _mapView.TileClicked -= OnTileClicked;
-            _controlsView.EndMovementPhaseRequested -= OnEndMovementRequested;
+            _input.TileSelected -= OnTileSelected;
+            _input.EndMovementRequested -= OnEndMovementRequested;
             _controlsView.SetEndMovementAvailable(false);
             _mapView.ClearTilesColor();
             _context = null;
+            _input = null;
         }
 
-        private void OnTileClicked(Tile tile)
+        private void OnTileSelected(Tile tile)
         {
             // Check that the clicked tile is actually a valid tile the actor can move to
             if (_context.ReachableTiles.ContainsKey(tile))

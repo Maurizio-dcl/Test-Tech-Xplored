@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Actors;
+using Game.Input;
 using Game.Logging;
 using Game.Phases;
 using Game.Phases.Action;
@@ -83,11 +84,12 @@ namespace Game
         private void InitializeTurnDirector(List<Actor> actors)
         {
             ILogSink logSink = new UnityConsoleLogSink();
+            IActorInputResolver inputResolver = InitializeActorInputs(actors);
 
             // Initialize new phases here
             MaintenancePhase maintenancePhase = InitializeMaintenancePhase();
-            MovementPhase movementPhase = InitializeMovementPhase(logSink);
-            ActionPhase actionPhase = InitializeActionPhase(logSink);
+            MovementPhase movementPhase = InitializeMovementPhase(logSink, inputResolver);
+            ActionPhase actionPhase = InitializeActionPhase(logSink, inputResolver);
 
             List<ITurnPhase> phases = new List<ITurnPhase> { maintenancePhase, movementPhase, actionPhase };
 
@@ -95,6 +97,17 @@ namespace Game
                 _map,
                 actors,
                 phases);
+        }
+
+        private IActorInputResolver InitializeActorInputs(IReadOnlyList<Actor> actors)
+        {
+            IActorInput mouseInput = new MouseActorInput(mapView, actorControlsView);
+            var inputs = new Dictionary<Actor, IActorInput>(actors.Count);
+
+            for (int i = 0; i < actors.Count; i++)
+                inputs.Add(actors[i], mouseInput);
+
+            return new ActorInputResolver(inputs);
         }
 
         private MaintenancePhase InitializeMaintenancePhase()
@@ -108,29 +121,29 @@ namespace Game
             return new(maintenanceSystems);
         }
 
-        private MovementPhase InitializeMovementPhase(ILogSink logSink)
+        private MovementPhase InitializeMovementPhase(ILogSink logSink, IActorInputResolver inputResolver)
         {
             IMovementSystem[] movementSystems = { };
 
             IMovementSystem[] repeatingMovementSystems = new IMovementSystem[]
             {
                 new MovementCheckSystem(mapView, reachableTileColor),
-                new MovementSelectionSystem(mapView, actorControlsView),
+                new MovementSelectionSystem(mapView, actorControlsView, inputResolver),
                 new MovementSystemLoggingDecorator(new MovementExecuteSystem(), logSink)
             };
 
             return new(mapView, movementSystems, repeatingMovementSystems);
         }
 
-        private ActionPhase InitializeActionPhase(ILogSink logSink)
+        private ActionPhase InitializeActionPhase(ILogSink logSink, IActorInputResolver inputResolver)
         {
             IActionSystem[] actionSystems = { };
 
             IActionSystem[] repeatingActionSystems = {
-                new ActionSelectionSystem(actorControlsView),
+                new ActionSelectionSystem(actorControlsView, inputResolver),
                 new ActionTargetCheckSystem(),
-                new ActionTargetSelectionSystem(mapView, actorControlsView, targetableTileColor),
-                new ActionTargetConfirmationSystem(mapView, actorControlsView, targetableTileColor),
+                new ActionTargetSelectionSystem(mapView, actorControlsView, inputResolver, targetableTileColor),
+                new ActionTargetConfirmationSystem(mapView, actorControlsView, inputResolver, targetableTileColor),
                 new ActionSystemLoggingDecorator(new ActionExecuteSystem(), logSink)
             };
 
