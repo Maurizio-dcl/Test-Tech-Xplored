@@ -26,5 +26,9 @@ MonoBehaviour:
     maxValue: 50
     initialValue: 50
   actionDefinitions:
-  - {fileID: 11400000, guid: b8a5987a338ab4da28445f17e6a2a600, type: 2}
+  - {fileID: 11400000, guid: 85ae273e0ba8d4062acfce78777beba9, type: 2}
+  - {fileID: 11400000, guid: 98585281e3263452fa1f3bda34cb9886, type: 2}
+  - {fileID: 11400000, guid: bb497534fc7c9490289efa67c829fd20, type: 2}
+  - {fileID: 11400000, guid: c0d5360c02d4649cca74341ef4a04aaa, type: 2}
+  - {fileID: 11400000, guid: 714573d3ccc884b3da7fa561d9739b18, type: 2}
   visuals: {fileID: 4558753300199286193, guid: d2a8a74ddfe964729a696d7937a39cf8, type: 3}
