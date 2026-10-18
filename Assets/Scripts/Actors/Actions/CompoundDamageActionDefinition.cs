@@ -8,11 +8,8 @@ namespace Actors.Actions
     [CreateAssetMenu(
         fileName = "CompoundDamageActionDefinition",
         menuName = "ScriptableObjects/TestTechXplored/Actor/Actions/CompoundDamageActionDefinition")]
-    public sealed class CompoundDamageActionDefinition : ActionDefinition
+    public sealed class CompoundDamageActionDefinition : DamageActionDefinition
     {
-        [SerializeField] private int baseDamage = 1;
-        [SerializeField] private DiceExpression bonusDamageDiceExpression = new(1, Die.D2);
-
         [SerializeField] private int adjacentHeroAdditionalDamage = 1;
 
         public override ActionOutcome Execute(ActionPhaseContext context)

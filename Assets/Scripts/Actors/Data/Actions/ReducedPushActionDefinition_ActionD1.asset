@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15ef5ff7e29b48c9b6bbc83398abea0a, type: 3}
+  m_Name: ReducedPushActionDefinition_ActionD1
+  m_EditorClassIdentifier: Assembly-CSharp::Actors.Actions.ReducedPushActionDefinition
+  actionName: Action D1
+  actionDescription: Sposta un nemico di 1d6 / 2 (per difetto)
+  cooldown: 2
+  minRange: 1
+  maxRange: 1
+  targeting:
+    mode: 1
+    hasTypeFilter: 1
+    typeFilter: 1
+  icon: {fileID: 21300000, guid: 43b6b6b1c7cce46c1af88e77a912821f, type: 3}
+  backgroundColor: {r: 0.9098039, g: 0.46666667, b: 0.13333334, a: 1}
+  pushDistance: 0
+  hasBonusDiceExpression: 1
+  bonusPushDiceExpression:
+    diceNumber: 1
+    die: 6

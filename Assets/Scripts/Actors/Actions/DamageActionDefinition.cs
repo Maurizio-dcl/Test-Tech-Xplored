@@ -10,15 +10,20 @@ namespace Actors.Actions
     [CreateAssetMenu(
         fileName = "DamageActionDefinition",
         menuName = "ScriptableObjects/TestTechXplored/Actor/Actions/DamageActionDefinition")]
-    public sealed class DamageActionDefinition : ActionDefinition
+    public class DamageActionDefinition : ActionDefinition
     {
-        [SerializeField] private int baseDamage = 1;
-        [SerializeField] private DiceExpression bonusDamageDiceExpression = new(1, Die.D2);
+        [SerializeField] protected int baseDamage = 1;
+        
+        [SerializeField] protected bool hasBonusDiceExpression = false;
+        [SerializeField] protected DiceExpression bonusDamageDiceExpression;
 
         public override ActionOutcome Execute(ActionPhaseContext context)
         {
-            int bonusDamage = DiceRoller.Roll(bonusDamageDiceExpression).Total;
+            int bonusDamage = hasBonusDiceExpression
+                ? DiceRoller.Roll(bonusDamageDiceExpression).Total
+                : 0;
             int damage = baseDamage + bonusDamage;
+            
             IReadOnlyList<Actor> targets = context.SelectedTargets;
             List<IActionEffect> effects = new();
 
