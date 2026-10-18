@@ -21,12 +21,14 @@ namespace Game
     {
         [SerializeField] private MapView mapView;
         [SerializeField] private ActorControlsView actorControlsView;
+        [SerializeField] private EndGameView endGameView;
         [SerializeField] private BossSpawnsDefinition bossSpawnsDefinition;
 
         [SerializeField] private Color reachableTileColor = Color.green;
         [SerializeField] private Color targetableTileColor = Color.red;
 
         private Map.Map _map;
+        private List<Actor> _actors;
         private TurnDirector _turnDirector;
 
         private void Start()
@@ -34,14 +36,73 @@ namespace Game
             _map = new();
             mapView.Initialize(_map);
 
-            List<Actor> actors = InitializeActors();
+            _actors = InitializeActors();
 
-            InitializeTurnDirector(actors);
+            InitializeTurnDirector(_actors);
         }
 
-        private void Update() => _turnDirector?.Tick();
+        private void Update()
+        {
+            if (_turnDirector == null)
+                return;
+
+            _turnDirector.Tick();
+            RemoveDeadActors();
+        }
 
         private void OnDestroy() => _turnDirector?.Dispose();
+
+        // Very simple check here, could handle this better but was running out of time
+        private void RemoveDeadActors()
+        {
+            bool bossDied = false;
+            bool heroDied = false;
+
+            for (int i = _actors.Count - 1; i >= 0; i--)
+            {
+                Actor actor = _actors[i];
+                if (!actor.IsDead)
+                    continue;
+
+                if (actor.Definition.CharacterType == CharacterType.Boss)
+                    bossDied = true;
+                else
+                    heroDied = true;
+
+                _turnDirector.RemoveActor(actor);
+            }
+
+            if (bossDied)
+            {
+                EndGame(true);
+                return;
+            }
+
+            if (heroDied && !HasLivingHero())
+                EndGame(false);
+        }
+
+        private bool HasLivingHero()
+        {
+            for (int i = 0; i < _actors.Count; i++)
+            {
+                if (_actors[i].Definition.CharacterType == CharacterType.Hero)
+                    return true;
+            }
+
+            return false;
+        }
+
+        private void EndGame(bool victory)
+        {
+            _turnDirector.Dispose();
+            _turnDirector = null;
+
+            if (victory)
+                endGameView.ShowVictory();
+            else
+                endGameView.ShowDefeat();
+        }
 
         private List<Actor> InitializeActors()
         {

@@ -20,6 +20,7 @@ namespace Map
         private readonly Dictionary<Actor, Tile> _actorPositions = new();
 
         public event Action<Actor, Tile, Tile> ActorMoved;
+        public event Action<Actor, Tile> ActorRemoved;
 
         public int Width => _tiles.GetLength(1);
         public int Height => _tiles.GetLength(0);
@@ -82,6 +83,18 @@ namespace Map
             }
 
             return _actorPositions.TryGetValue(actor, out tile);
+        }
+
+        public bool Remove(Actor actor)
+        {
+            if (actor == null || !_actorPositions.TryGetValue(actor, out Tile tile))
+                return false;
+
+            _actorPositions.Remove(actor);
+            tile.Actor = null;
+            ActorRemoved?.Invoke(actor, tile);
+
+            return true;
         }
 
         // Naive search, I think this is more than enough for this example, could be replaced with a flood-fill like

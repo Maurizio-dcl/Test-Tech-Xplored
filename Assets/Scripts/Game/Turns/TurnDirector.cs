@@ -8,7 +8,7 @@ namespace Game.Turns
     public sealed class TurnDirector : IDisposable
     {
         private readonly Map.Map _map;
-        private readonly IReadOnlyList<Actor> _actors;
+        private readonly List<Actor> _actors;
         private readonly IReadOnlyList<ITurnPhase> _phases;
 
         private int _actorIndex;
@@ -18,7 +18,7 @@ namespace Game.Turns
 
         public TurnDirector(
             Map.Map map,
-            IReadOnlyList<Actor> actors,
+            List<Actor> actors,
             IReadOnlyList<ITurnPhase> phases)
         {
             _map = map;
@@ -26,6 +26,46 @@ namespace Game.Turns
             _phases = phases;
 
             _round = 1;
+        }
+
+        public bool RemoveActor(Actor actor)
+        {
+            int removedIndex = _actors.IndexOf(actor);
+            if (removedIndex < 0)
+                return false;
+
+            bool removedActiveActor = removedIndex == _actorIndex;
+            if (removedActiveActor && _phaseStarted)
+            {
+                _phases[_phaseIndex].End();
+                _phaseStarted = false;
+            }
+
+            _actors.RemoveAt(removedIndex);
+            _map.Remove(actor);
+
+            if (_actors.Count == 0)
+            {
+                _actorIndex = 0;
+                _phaseIndex = 0;
+                return true;
+            }
+
+            if (removedIndex < _actorIndex)
+            {
+                _actorIndex--;
+            }
+            else if (removedActiveActor)
+            {
+                _phaseIndex = 0;
+                if (_actorIndex >= _actors.Count)
+                {
+                    _actorIndex = 0;
+                    _round++;
+                }
+            }
+
+            return true;
         }
 
         public void Tick()

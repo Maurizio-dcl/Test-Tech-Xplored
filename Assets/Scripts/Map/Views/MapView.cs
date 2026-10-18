@@ -40,6 +40,7 @@ namespace Map.Views
 
             _map = map;
             _map.ActorMoved += OnActorMoved;
+            _map.ActorRemoved += OnActorRemoved;
 
             gridLayout.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
             gridLayout.constraintCount = map.Width;
@@ -82,6 +83,15 @@ namespace Map.Views
         private void OnRectTransformDimensionsChange() => ResizeGrid();
 
         private void OnActorMoved(Actor actor, Tile previous, Tile destination) => RenderActor(actor, destination);
+
+        private void OnActorRemoved(Actor actor, Tile tile)
+        {
+            if (!_actorViews.TryGetValue(actor, out GameObject actorView))
+                return;
+
+            _actorViews.Remove(actor);
+            Destroy(actorView);
+        }
 
         private void OnTileClicked(TileView tileView)
         {
@@ -160,7 +170,10 @@ namespace Map.Views
         private void Unsubscribe()
         {
             if (_map != null)
+            {
                 _map.ActorMoved -= OnActorMoved;
+                _map.ActorRemoved -= OnActorRemoved;
+            }
 
             _map = null;
         }

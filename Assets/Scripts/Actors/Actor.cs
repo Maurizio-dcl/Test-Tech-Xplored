@@ -18,6 +18,7 @@ namespace Actors
         public ActorDefinition Definition => _definition;
         public IReadOnlyCollection<Stat> Stats => _stats.Values;
         public IReadOnlyList<Action> Actions => _actions;
+        public bool IsDead => TryGetStat(StatTag.Hp, out Stat hp) && hp.Value == hp.MinValue;
 
         public Actor(int uniqueId, ActorDefinition definition)
         {
