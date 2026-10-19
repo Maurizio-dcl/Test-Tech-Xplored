@@ -26,3 +26,19 @@ main game logic.
 After the state changes the host would broadcast game state to peers. This is not currently supported
 since it would have been too much work in this short amount of time, and would not have 
 a real use case for the scope of the project.
+
+## Physical interface
+
+Although the physical interface with the board was not detailed, I imagine it as a layer with some sort
+of callbacks/events about the miniatures movement and physical dice throws, I would probably implement
+it by allowing concrete classes implementing `IActorInput` to be hybrid:
+
+- using dependency injection and the component pattern to inject the physical interface
+- have only some inputs, like movement or a new dice input to subscribe to the physical interface 
+- have the others subscribe to whatever input source we are using (local or network as detailed above)
+
+This way we could achieve something like:
+
+- movement and dice throws would be controlled by the physical interface with the board, independent of the fact that 
+this is remote device or local
+- action/target selection and whatever else "digital only" input would be controlled by the UI of that device
