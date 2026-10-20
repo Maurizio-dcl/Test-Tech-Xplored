@@ -148,7 +148,7 @@ namespace Game
             IActorInputResolver inputResolver = InitializeActorInputs(actors);
 
             // Initialize new phases here
-            MaintenancePhase maintenancePhase = InitializeMaintenancePhase();
+            MaintenancePhase maintenancePhase = InitializeMaintenancePhase(actors);
             MovementPhase movementPhase = InitializeMovementPhase(logSink, inputResolver);
             ActionPhase actionPhase = InitializeActionPhase(logSink, inputResolver);
 
@@ -171,11 +171,12 @@ namespace Game
             return new ActorInputResolver(inputs);
         }
 
-        private MaintenancePhase InitializeMaintenancePhase()
+        private MaintenancePhase InitializeMaintenancePhase(IReadOnlyList<Actor> actors)
         {
             IMaintenanceSystem[] maintenanceSystems =
             {
                 new MovementMaintenanceSystem(),
+                new AggroMaintenanceSystem(actors),
                 new ActionMaintenanceSystem(actorControlsView)
             };
 
