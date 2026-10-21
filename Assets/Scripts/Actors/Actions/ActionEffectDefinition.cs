@@ -35,9 +35,17 @@ namespace Actors.Actions
 
         protected int ResolveValue(ActionEffectExecutionContext context)
         {
-            int diceValue = hasBonusDice ? DiceRoller.Roll(bonusDice).Total : 0;
+            int diceValue = hasBonusDice ? ResolveDiceRoll(context, bonusDice) : 0;
             int contextValue = contextualValue?.GetValue(context) ?? 0;
             return Mathf.FloorToInt((baseValue + diceValue + contextValue) * multiplier);
+        }
+
+        protected int ResolveDiceRoll(
+            ActionEffectExecutionContext context,
+            DiceExpression expression)
+        {
+            int rollTotal = DiceRoller.Roll(expression).Total;
+            return rollTotal + context.Source.ConsumeNextDiceRollBonus();
         }
     }
 }

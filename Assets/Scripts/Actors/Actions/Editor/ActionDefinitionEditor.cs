@@ -1,4 +1,3 @@
-using System;
 using Actors.Actions.Definitions;
 using UnityEditor;
 using UnityEditorInternal;
@@ -69,10 +68,21 @@ namespace Actors.Actions.Editor
         private void ShowAddEffectMenu(Rect buttonRect, ReorderableList list)
         {
             var menu = new GenericMenu();
-            menu.AddItem(new GUIContent("Damage"), false, () => AddEffect<DamageEffectDefinition>());
-            menu.AddItem(new GUIContent("Heal"), false, () => AddEffect<HealEffectDefinition>());
-            menu.AddItem(new GUIContent("Push"), false, () => AddEffect<PushEffectDefinition>());
-            menu.AddItem(new GUIContent("Aggro"), false, () => AddEffect<AggroEffectDefinition>());
+            menu.AddItem(new GUIContent("Damage"),
+                false,
+                () => AddEffect<DamageEffectDefinition>());
+            menu.AddItem(new GUIContent("Heal"),
+                false,
+                () => AddEffect<HealEffectDefinition>());
+            menu.AddItem(new GUIContent("Push"),
+                false,
+                () => AddEffect<PushEffectDefinition>());
+            menu.AddItem(new GUIContent("Aggro"),
+                false,
+                () => AddEffect<AggroEffectDefinition>());
+            menu.AddItem(new GUIContent("Next Dice Roll Bonus"),
+                false,
+                () => AddEffect<NextDiceRollBonusEffectDefinition>());
             menu.DropDown(buttonRect);
         }
 
@@ -111,6 +121,7 @@ namespace Actors.Actions.Editor
                 HealEffectDefinition => "Heal Effect",
                 PushEffectDefinition => "Push Effect",
                 AggroEffectDefinition => "Aggro Effect",
+                NextDiceRollBonusEffectDefinition => "Next Dice Roll Bonus Effect",
                 null => "Missing Effect",
                 object value => ObjectNames.NicifyVariableName(
                     value.GetType().Name.Replace("Definition", string.Empty))

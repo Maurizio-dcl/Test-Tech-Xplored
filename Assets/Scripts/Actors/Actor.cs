@@ -13,6 +13,9 @@ namespace Actors
 
         private readonly Dictionary<StatTag, Stat> _stats = new();
         private readonly List<Action> _actions = new();
+        // I'm keeping it simple here, to allow the flexibility of having multiple types
+        // of different bonuses a polymorphic list of buffs/debuffs would be better
+        private int _nextDiceRollBonus;
 
         public int UniqueId => _uniqueId;
         public ActorDefinition Definition => _definition;
@@ -49,5 +52,22 @@ namespace Actors
 
         public bool TryGetStat(StatTag tag, out Stat stat) =>
             _stats.TryGetValue(tag, out stat);
+
+        public void AddNextDiceRollBonus(int amount)
+        {
+            if (amount <= 0)
+                return;
+
+            _nextDiceRollBonus = (int)Math.Min(
+                int.MaxValue,
+                (long)_nextDiceRollBonus + amount);
+        }
+
+        public int ConsumeNextDiceRollBonus()
+        {
+            int bonus = _nextDiceRollBonus;
+            _nextDiceRollBonus = 0;
+            return bonus;
+        }
     }
 }
