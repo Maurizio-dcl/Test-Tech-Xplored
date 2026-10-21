@@ -8,6 +8,7 @@ namespace Actors.Actions
         public Actor Target { get; }
         public Vector2Int Origin { get; }
         public Vector2Int Destination { get; }
+        public int Distance => Mathf.Abs(Destination.x - Origin.x) + Mathf.Abs(Destination.y - Origin.y);
 
         public PushEffect(Actor target, Vector2Int origin, Vector2Int destination)
         {

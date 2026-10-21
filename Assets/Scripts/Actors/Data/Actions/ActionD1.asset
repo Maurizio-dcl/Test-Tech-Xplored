@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62e1ff5ffaf2407295e4f15fd5637add, type: 3}
+  m_Name: ActionD1
+  m_EditorClassIdentifier: Assembly-CSharp::Actors.Actions.ActionDefinition
+  actionName: Action D1
+  actionDescription: Sposta un nemico di 1d6 / 2 (per difetto)
+  cooldown: 2
+  minRange: 1
+  maxRange: 1
+  targeting:
+    mode: 1
+    hasTypeFilter: 1
+    typeFilter: 1
+  icon: {fileID: 21300000, guid: 43b6b6b1c7cce46c1af88e77a912821f, type: 3}
+  backgroundColor: {r: 0.9098039, g: 0.46666667, b: 0.13333334, a: 1}
+  effects:
+  - rid: 701
+  - rid: 702
+  references:
+    version: 2
+    RefIds:
+    - rid: 701
+      type: {class: PushEffectDefinition, ns: Actors.Actions.Definitions, asm: Assembly-CSharp}
+      data:
+        baseValue: 0
+        hasBonusDice: 1
+        bonusDice: {diceNumber: 1, die: 6}
+        multiplier: 0.5
+        contextualValue: {rid: -2}
+    - rid: 702
+      type: {class: AggroEffectDefinition, ns: Actors.Actions.Definitions, asm: Assembly-CSharp}
+      data:
+        baseValue: 6
+        hasBonusDice: 0
+        bonusDice: {diceNumber: 0, die: 0}
+        multiplier: 1
+        contextualValue: {rid: -2}

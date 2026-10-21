@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62e1ff5ffaf2407295e4f15fd5637add, type: 3}
+  m_Name: ActionC2
+  m_EditorClassIdentifier: Assembly-CSharp::Actors.Actions.ActionDefinition
+  actionName: Action C2
+  actionDescription: Cura tutti gli alleati adiacenti di 2 + 1d6
+  cooldown: 3
+  minRange: 1
+  maxRange: 1
+  targeting:
+    mode: 0
+    hasTypeFilter: 1
+    typeFilter: 0
+  icon: {fileID: 21300000, guid: c3f426a13b35f4cdf9a16606eace4085, type: 3}
+  backgroundColor: {r: 0, g: 0.69411767, b: 0.2509804, a: 1}
+  effects:
+  - rid: 601
+  - rid: 602
+  references:
+    version: 2
+    RefIds:
+    - rid: 601
+      type: {class: HealEffectDefinition, ns: Actors.Actions.Definitions, asm: Assembly-CSharp}
+      data:
+        baseValue: 2
+        hasBonusDice: 1
+        bonusDice: {diceNumber: 1, die: 6}
+        multiplier: 1
+        contextualValue: {rid: -2}
+    - rid: 602
+      type: {class: AggroEffectDefinition, ns: Actors.Actions.Definitions, asm: Assembly-CSharp}
+      data:
+        baseValue: 0
+        hasBonusDice: 0
+        bonusDice: {diceNumber: 0, die: 0}
+        multiplier: 2
+        contextualValue: {rid: 603}
+    - rid: 603
+      type: {class: HealedTargetCountValueProvider, ns: Actors.Actions.ValueProviders, asm: Assembly-CSharp}
+      data: {}
