@@ -30,6 +30,19 @@ namespace Actors.Actions
         public Color BackgroundColor => backgroundColor;
         public IReadOnlyList<ActionEffectDefinition> Effects => effects;
 
+        public bool CanTarget(Actor target, int distance)
+        {
+            if (target == null ||
+                minRange < 0 ||
+                maxRange < minRange ||
+                distance < minRange ||
+                distance > maxRange)
+                return false;
+
+            CharacterType? typeFilter = targeting.TypeFilter;
+            return !typeFilter.HasValue || target.Definition.CharacterType == typeFilter.Value;
+        }
+
         public ActionOutcome Execute(ActionPhaseContext context)
         {
             List<IActionEffect> outcomes = new();

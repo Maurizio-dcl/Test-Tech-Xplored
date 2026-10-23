@@ -8,6 +8,8 @@ namespace Game.Phases.Action.Systems
 {
     public sealed class ActionTargetCheckSystem : IActionSystem
     {
+        private readonly Dictionary<Tile, int> _tilesInRange = new();
+
         public void Enter(ActionPhaseContext context)
         {
         }
@@ -15,21 +17,22 @@ namespace Game.Phases.Action.Systems
         public ActionSystemStatus Tick(ActionPhaseContext context)
         {
             ActionDefinition definition = context.SelectedAction.Definition;
-            Dictionary<Tile, int> tilesInRange = context.Turn.Map.GetTilesInRange(
+            context.Turn.Map.GetTilesInRange(
                 context.Turn.Actor,
                 definition.MinRange,
                 definition.MaxRange,
+                _tilesInRange,
                 blockingType: null);
             var validTargets = new List<Actor>();
 
-            foreach (Tile tile in tilesInRange.Keys)
+            foreach (KeyValuePair<Tile, int> pair in _tilesInRange)
             {
+                Tile tile = pair.Key;
                 if (!tile.IsOccupied)
                     continue;
 
                 Actor candidate = tile.Actor;
-                CharacterType? typeFilter = definition.Targeting.TypeFilter;
-                if (!typeFilter.HasValue || candidate.Definition.CharacterType == typeFilter.Value)
+                if (definition.CanTarget(candidate, pair.Value))
                     validTargets.Add(candidate);
             }
 

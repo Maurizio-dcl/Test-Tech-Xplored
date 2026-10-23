@@ -23,6 +23,7 @@ namespace Game
         [SerializeField] private ActorControlsView actorControlsView;
         [SerializeField] private EndGameView endGameView;
         [SerializeField] private BossSpawnsDefinition bossSpawnsDefinition;
+        [SerializeField] private bool playerControlsBoss;
 
         [SerializeField] private Color reachableTileColor = Color.green;
         [SerializeField] private Color targetableTileColor = Color.red;
@@ -166,7 +167,13 @@ namespace Game
             var inputs = new Dictionary<Actor, IActorInput>(actors.Count);
 
             for (int i = 0; i < actors.Count; i++)
-                inputs.Add(actors[i], mouseInput);
+            {
+                Actor actor = actors[i];
+                IActorInput input = actor.Definition.CharacterType == CharacterType.Boss && !playerControlsBoss
+                    ? new BossActorInput(actor, actors, _map)
+                    : mouseInput;
+                inputs.Add(actor, input);
+            }
 
             return new ActorInputResolver(inputs);
         }

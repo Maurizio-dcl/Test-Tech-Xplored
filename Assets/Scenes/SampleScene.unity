@@ -452,6 +452,7 @@ MonoBehaviour:
   actorControlsView: {fileID: 317095371}
   endGameView: {fileID: 1648378076}
   bossSpawnsDefinition: {fileID: 11400000, guid: 9956619ef71fc47b695780835126b4b2, type: 2}
+  playerControlsBoss: 0
   reachableTileColor: {r: 0, g: 1, b: 0, a: 1}
   targetableTileColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!4 &157985361

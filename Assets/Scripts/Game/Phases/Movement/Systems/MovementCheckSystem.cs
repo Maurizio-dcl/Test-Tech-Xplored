@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Actors;
+using Map;
 using Map.Views;
 using UnityEngine;
 
@@ -14,6 +15,7 @@ namespace Game.Phases.Movement.Systems
 
         private readonly MapView _mapView;
         private readonly Color _reachableTileColor;
+        private readonly Dictionary<Tile, int> _reachableTiles = new();
 
         public MovementCheckSystem(MapView mapView, Color reachableTileColor)
         {
@@ -34,19 +36,20 @@ namespace Game.Phases.Movement.Systems
             if (context.MovementStat == null || context.MovementStat.Value <= 0)
                 return MovementSystemStatus.EndPhase;
 
-            var reachableTiles = context.Turn.Map.GetTilesInRange(
+            context.Turn.Map.GetTilesInRange(
                 context.Turn.Actor,
                 1,
                 context.MovementStat.Value,
+                _reachableTiles,
                 context.Turn.Actor.Definition.BlockingType,
                 OccupiedTileTypes);
 
-            context.ReachableTiles = reachableTiles;
+            context.ReachableTiles = _reachableTiles;
 
-            if (reachableTiles.Count == 0)
+            if (_reachableTiles.Count == 0)
                 return MovementSystemStatus.EndPhase;
 
-            _mapView.SetTilesColor(reachableTiles.Keys.ToHashSet(), _reachableTileColor);
+            _mapView.SetTilesColor(_reachableTiles.Keys.ToHashSet(), _reachableTileColor);
 
             return MovementSystemStatus.Complete;
         }

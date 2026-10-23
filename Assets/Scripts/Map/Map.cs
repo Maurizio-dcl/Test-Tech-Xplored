@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Actors;
 using UnityEngine;
 using UnityEngine.Pool;
+using Utils;
 
 namespace Map
 {
@@ -121,7 +122,7 @@ namespace Map
                 if (typeFilter.HasValue && candidate.Definition.CharacterType != typeFilter.Value)
                     continue;
 
-                int distance = ManhattanDistance(
+                int distance = DistanceUtils.ManhattanDistance(
                     originTile.Position,
                     pair.Value.Position);
 
@@ -159,7 +160,7 @@ namespace Map
                 if (typeFilter.HasValue && candidate.Definition.CharacterType != typeFilter.Value)
                     continue;
 
-                if (ManhattanDistance(originTile.Position, pair.Value.Position) <= radius)
+                if (DistanceUtils.ManhattanDistance(originTile.Position, pair.Value.Position) <= radius)
                     result.Add(candidate);
             }
 
@@ -168,19 +169,21 @@ namespace Map
 
         // This uses a flood-fill algorithm to evaluate neighboring tiles until maxDistance is reached.
         // Blocking types stop the search, while excluded types are traversed but omitted from the result.
-        public Dictionary<Tile, int> GetTilesInRange(
+        // The result buffer is cleared before performing the search so it can be reused between calls.
+        public void GetTilesInRange(
             Actor actor,
             int minDistance,
             int maxDistance,
+            Dictionary<Tile, int> result,
             CharacterType? blockingType = null,
             List<CharacterType> excludedTypes = null)
         {
-            var result = new Dictionary<Tile, int>();
+            result.Clear();
 
             // If the range is invalid or the actor is not on the map there are no tiles to search
             if (minDistance < 0 || maxDistance < minDistance ||
                 !_actorPositions.TryGetValue(actor, out Tile start))
-                return result;
+                return;
 
             // New discovered tiles whose neighbors will be searched in the loop
             var pending = ListPool<Tile>.Get();
@@ -249,8 +252,6 @@ namespace Map
                 ListPool<Tile>.Release(pending);
                 DictionaryPool<Tile, int>.Release(distances);
             }
-
-            return result;
         }
 
         // Empty tiles cannot be excluded since exclusions only apply to actor types
@@ -261,8 +262,5 @@ namespace Map
 
         private bool IsInside(Vector2Int position) =>
             position.x >= 0 && position.x < Width && position.y >= 0 && position.y < Height;
-
-        private static int ManhattanDistance(Vector2Int a, Vector2Int b) =>
-            Mathf.Abs(a.x - b.x) + Mathf.Abs(a.y - b.y);
     }
 }

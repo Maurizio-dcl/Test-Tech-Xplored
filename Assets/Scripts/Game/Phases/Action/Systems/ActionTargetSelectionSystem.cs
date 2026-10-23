@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Actors;
-using Actors.Actions;
 using Game.Input;
 using Game.Views;
 using Map;
@@ -52,20 +50,12 @@ namespace Game.Phases.Action.Systems
 
             _input = _inputResolver.Resolve(context.Turn.Actor);
 
-            // Get targets tiles to highlight (nothing blocks the flood fill and all occupied tiles are allowed
-            ActionDefinition definition = context.SelectedAction.Definition;
-            Dictionary<Tile, int> tilesInRange = context.Turn.Map.GetTilesInRange(
-                context.Turn.Actor,
-                definition.MinRange,
-                definition.MaxRange,
-                blockingType: null);
-            
-            // Filter only valid targets by type
-            var validTargetSet = new HashSet<Actor>(validTargets);
-            foreach (Tile tile in tilesInRange.Keys)
+            // The previous system already checked range and target type, get the tiles to highlight directly
+            for (int i = 0; i < validTargets.Count; i++)
             {
-                if (tile.IsOccupied && validTargetSet.Contains(tile.Actor))
-                    _targetsByTile.Add(tile, tile.Actor);
+                Actor target = validTargets[i];
+                if (context.Turn.Map.TryGetActorTile(target, out Tile tile))
+                    _targetsByTile.Add(tile, target);
             }
 
             _mapView.ClearTilesColor();
